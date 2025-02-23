@@ -1,7 +1,7 @@
 from app import create_app
 from waitress import serve
 from config import DevelopmentConfig, ProductionConfig
-from app.database.database import db
+# from app.database.database import db
 
 
 app = create_app()
