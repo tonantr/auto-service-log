@@ -26,3 +26,6 @@ Thumbs.db
 
 # Sensitive configuration
 config.py
+
+# Logging
+app.log
