@@ -14,8 +14,9 @@ class AdminService:
     @staticmethod
     def get_all_users():
         try:
-            return User.query.all()
+            users = User.query.all()
             logger.info("Successfully retrieved all users from the database.")
+            return users
         except Exception as e:
             logger.error(f"Error in get_all_users: {str(e)}")
             return []
