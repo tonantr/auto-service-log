@@ -1,4 +1,5 @@
-from . import db
+from app.database.database import db
+from app.models.car import Car
 
 
 class User(db.Model):

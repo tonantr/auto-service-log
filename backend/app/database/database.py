@@ -1,6 +1,6 @@
-from flask_sqlalchemy import SQLALchemy
+from flask_sqlalchemy import SQLAlchemy
 
-db = SQLALchemy()
+db = SQLAlchemy()
 
 class Database:
     def __init__(self, app=None):
@@ -11,7 +11,9 @@ class Database:
         db.init_app(app)
     
     def create_all(self):
-        db.create_all()
+        with db.app.app_context():
+            db.create_all()
     
     def drop_all(self):
-        db.drop_all()
+        with db.app.app_context():
+            db.drop_all()

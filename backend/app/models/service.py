@@ -1,4 +1,4 @@
-from . import db
+from app.database.database import db
 
 
 class Service(db.Model):

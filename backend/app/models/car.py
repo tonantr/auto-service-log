@@ -1,4 +1,5 @@
-from . import db
+from app.database.database import db
+from app.models.service import Service
 
 
 class Car(db.Model):
