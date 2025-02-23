@@ -4,8 +4,6 @@ __pycache__/
 *.pyo
 .venv/
 env/
-instance/
-*.sqlite3
 
 # Flask
 .migrations/
