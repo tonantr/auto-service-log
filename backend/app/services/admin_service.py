@@ -3,7 +3,6 @@ from app.models.user import User
 from app.utils.constants import (
     RETRIEVAL_SUCCESS,
     ERROR_NO_USERS_FOUND,
-    ERROR_USERNAME_NOT_FOUND,
 )
 
 
@@ -28,16 +27,14 @@ class AdminService:
         except Exception as e:
             logger.error(f"Error in get_all_users: {str(e)}")
             return None
+    
 
     @staticmethod
-    def get_user_by_username(username):
+    def get_total_users():
         try:
-            user = User.query.filter_by(username=username).first()
-            if user:
-                logger.info(RETRIEVAL_SUCCESS)
-                return user
-            else:
-                logger.warning(ERROR_USERNAME_NOT_FOUND)
+            return User.query.count()
         except Exception as e:
-            logger.error(f"Error in get_user_by_username: {str(e)}")
+            logger.error(f"Error in get_total_users: {str(e)}")
             return None
+
+
