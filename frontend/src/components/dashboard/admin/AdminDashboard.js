@@ -36,7 +36,7 @@ function AdminDashboard() {
                 <ul>
                     <li><Link to="/admin" className="sidebar-link">Dashboard</Link></li>
                     <li><Link to="/admin/users" className="sidebar-link">Users</Link></li>
-                    <li><Link to="#" className="sidebar-link">Cars</Link></li>
+                    <li><Link to="/admin/cars" className="sidebar-link">Cars</Link></li>
                     <li><Link to="#" className="sidebar-link">Services</Link></li>
                     <li><a href="#" className="sidebar-link" onClick={handleLogout}>Logout</a></li>
                 </ul>

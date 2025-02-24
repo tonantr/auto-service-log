@@ -4,6 +4,7 @@ import AdminDashboard from "./components/dashboard/admin/AdminDashboard";
 import Login from "./components/auth/Login";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UserList from "./components/dashboard/admin/UserList";
+import CarList from "./components/dashboard/admin/CarList";
 import DashboardHome from "./components/dashboard/admin/DashboardHome";
 import './App.css'; 
 
@@ -34,6 +35,7 @@ function App() {
         >
           <Route index element={<DashboardHome />} />
           <Route path="users" element={<UserList />} />
+          <Route path="cars" element={<CarList />} />
         </Route>
       </Routes>
     </Router>
