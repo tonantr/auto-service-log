@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const [username, setUsername] = useState('');
-    const [password, setPassword] = useState(null);
+    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
     const navigate = useNavigate();
@@ -37,7 +37,7 @@ function Login() {
 
     return (
         <div className="login-container">
-            <h2>Login</h2>
+            <h3>Login</h3>
             <form onSubmit={login}>
                 <div style={{ marginBottom: '10px' }}>
                     <div>
@@ -46,9 +46,10 @@ function Login() {
                     <input
                         id="username"
                         type="text"
-                        value={username}
+                        value={username || ''}
                         onChange={(e) => setUsername(e.target.value)}
                         required
+                        className="input-button"
                     />
                 </div>
                 <div style={{ marginBottom: '10px' }}>
@@ -58,12 +59,13 @@ function Login() {
                     <input
                         id="password"
                         type="password"
-                        value={password}
+                        value={password || ''}
                         onChange={(e) => setPassword(e.target.value)}
                         required
+                        className="input-button"
                     />
                 </div>
-                <button type="submit" style={{ marginTop: '10px' }}>Login</button>
+                <button type="submit" style={{ marginTop: '10px'}} className="input-button">Login</button>
             </form>
 
             {error && <p className="error">{error}</p>}

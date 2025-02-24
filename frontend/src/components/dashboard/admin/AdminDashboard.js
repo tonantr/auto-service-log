@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
 function AdminDashboard() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,8 +17,13 @@ function AdminDashboard() {
 
     const handleLogout = () => {
         localStorage.removeItem('access_token');
+        setIsAuthenticated(false);
         navigate("/login");
     };
+
+    if (isAuthenticated === null) {
+        return <div>Loading...</div>; 
+    }
 
     if (!isAuthenticated) {
         return null;

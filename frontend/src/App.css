@@ -154,3 +154,7 @@ h1, h2, h3, h4, h5, h6 {
     transform: rotate(360deg);
   }
 }
+
+.input-button {
+  width: 150px;
+}
