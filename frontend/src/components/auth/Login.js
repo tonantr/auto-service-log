@@ -8,13 +8,12 @@ function Login() {
     const [error, setError] = useState('');
 
     const navigate = useNavigate();
-    const API_URL = process.env.REACT_APP_API_URL
 
     const login = async function(e) {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`${API_URL}/`, {
+            const response = await axios.post('/', {
                 username, password,
             });
             console.log(response.date);

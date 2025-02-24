@@ -27,16 +27,20 @@ function AdminDashboard() {
     return (
         <div className="admin-dashboard">
             <div className="sidebar">
-                <h3>Admin Menu</h3>
+                <h3>Menu</h3>
                 <ul>
-                    <li><Link to="/admin">Dashboard</Link></li>
-                    <li><Link to="/admin/users">Users</Link></li>
-                    <li><a href="#">Settings</a></li>
-                    <li><a href="#" onClick={handleLogout}>Logout</a></li>
+                    <li><Link to="/admin" className="sidebar-link">Dashboard</Link></li>
+                    <li><Link to="/admin/users" className="sidebar-link">Users</Link></li>
+                    <li><Link to="#" className="sidebar-link">Cars</Link></li>
+                    <li><Link to="#" className="sidebar-link">Services</Link></li>
+                    <li><a href="#" className="sidebar-link" onClick={handleLogout}>Logout</a></li>
                 </ul>
             </div>
 
             <div className="main-content">
+                <div className="header">
+                    <h2>Admin Dashboard</h2>
+                </div>
                 <div className="content">
                     <Outlet />
                 </div>

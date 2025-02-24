@@ -29,3 +29,20 @@ def get_users():
     except Exception as e:
         logging.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
+
+
+@admin_bp.route('/dashboard_home', methods=['GET'])
+def get_dashboard_data():
+    try:
+        total_users = AdminService.get_total_users()
+        total_cars = AdminService.get_total_cars()
+        total_services = AdminService.get_total_services()
+        
+        return jsonify({
+            'total_users': total_users,
+            'total_cars': total_cars,
+            'total_services': total_services
+        })
+    except Exception as e:
+        logging.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
+        return jsonify(message=ERROR_FETCHING_DATA), 500

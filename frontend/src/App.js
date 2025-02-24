@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import AdminDashboard from "./components/dashboard/admin/AdminDashboard";
 import Login from "./components/auth/Login";
-import ProtectedRoute from "./components/auth/ProtectedRoute"; 
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UserList from "./components/dashboard/admin/UserList";
+import DashboardHome from "./components/dashboard/admin/DashboardHome";
+import './App.css'; 
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -30,7 +32,7 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<h3>Welcome to the Dashboard!</h3>} />
+          <Route index element={<DashboardHome />} />
           <Route path="users" element={<UserList />} />
         </Route>
       </Routes>

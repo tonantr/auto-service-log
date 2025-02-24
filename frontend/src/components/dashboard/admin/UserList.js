@@ -7,18 +7,18 @@ function UserList() {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState('');
 
-    const API_URL = process.env.REACT_APP_API_URL;
     const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
+        
         if (!token) {
             navigate("/login");
             return;
         }
 
         axios
-            .get(`${API_URL}/admin/users`, {
+            .get('/admin/users', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -29,7 +29,7 @@ function UserList() {
             .catch((err) => {
                 setError("Error fetching users: " + err.message);
             });
-    }, [API_URL, navigate]);
+    }, [navigate]);
 
     return (
         <div>
