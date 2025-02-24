@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import PaginatedTable from "../../../PaginatedTable";
 
 function UserList() {
     const [users, setUsers] = useState([]);
@@ -33,36 +34,19 @@ function UserList() {
             });
     }, [navigate]);
 
+    const columns = [
+        { name: "Username", selector: row => row.username },
+        { name: "Role", selector: row => row.role },
+        { name: "Email", selector: row => row.email },
+    ];
+
     return (
         <div>
-
             {error && <p className="text-red-500">{error}</p>}
-
             {loading ? (
                 <p className="text-gray-600 mt-2">Loading...</p>
-            ) : users.length === 0 ? (
-                <p className="text-gray-600 mt-2">No users found.</p>
             ) : (
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Username</th>
-                            <th>Role</th>
-                            <th>Email</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.map(function (user) {
-                            return (
-                                <tr key={user.user_id}>
-                                    <td>{user.username}</td>
-                                    <td>{user.role}</td>
-                                    <td>{user.email}</td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                <PaginatedTable title="User List" columns={columns} data={users} />
             )}
         </div>
     );
