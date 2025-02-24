@@ -1,5 +1,7 @@
 import logging
 from app.models.user import User
+from app.models.car import Car
+from app.models.service import Service
 from app.utils.constants import (
     RETRIEVAL_SUCCESS,
     ERROR_NO_USERS_FOUND,
@@ -27,7 +29,6 @@ class AdminService:
         except Exception as e:
             logger.error(f"Error in get_all_users: {str(e)}")
             return None
-    
 
     @staticmethod
     def get_total_users():
@@ -37,4 +38,18 @@ class AdminService:
             logger.error(f"Error in get_total_users: {str(e)}")
             return None
 
+    @staticmethod
+    def get_total_cars():
+        try:
+            return Car.query.count()
+        except Exception as e:
+            logger.error(f"Error in get_total_cars: {str(e)}")
+            return None
 
+    @staticmethod
+    def get_total_services():
+        try:
+            return Service.query.count()
+        except Exception as e:
+            logger.error(f"Error in get_total_services: {str(e)}")
+            return None
