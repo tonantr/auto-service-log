@@ -3,6 +3,7 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 
 function AdminDashboard() {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -19,6 +20,15 @@ function AdminDashboard() {
         localStorage.removeItem('access_token');
         setIsAuthenticated(false);
         navigate("/login");
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        console.log("Search query:", searchQuery); 
     };
 
     if (isAuthenticated === null) {
@@ -45,6 +55,16 @@ function AdminDashboard() {
             <div className="main-content">
                 <div className="header">
                     <h2>Admin Dashboard</h2>
+                    <form onSubmit={handleSearchSubmit}>
+                        <input 
+                            type="text" 
+                            placeholder="Search..." 
+                            value={searchQuery} 
+                            onChange={handleSearchChange} 
+                            className="search-bar"
+                        />
+                        <button type="submit" className="search-button">Search</button>
+                    </form>
                 </div>
                 <div className="content">
                     <Outlet />
