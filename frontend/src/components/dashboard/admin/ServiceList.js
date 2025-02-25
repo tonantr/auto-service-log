@@ -45,11 +45,24 @@ function ServiceList() {
         { name: "ID", selector: row => row.service_id },
         { name: "Car Name", selector: row => row.car_name },
         { name: "Mileage", selector: row => row.mileage },
-        { name: "Service Type", selector: row => truncateText(row.service_type) },
+        { 
+            name: "Service Type", selector: row => (
+                <td title={row.service_type}>
+                    {truncateText(row.service_type)}
+                </td>
+            )
+
+        },
         { name: "Service Date", selector: row => row.service_date },
         { name: "Next Service Date", selector: row => row.next_service_date },
         { name: "Cost", selector: row => row.cost },
-        { name: "Notes", selector: row => truncateText(row.notes) },
+        {
+            name: "Notes", selector: row => (
+                <td title={row.notes}>
+                    {truncateText(row.notes)}
+                </td>
+            )
+        },
     ];
 
     return (
