@@ -35,6 +35,7 @@ function UserList() {
     }, [navigate]);
 
     const columns = [
+        { name: "ID", selector: row => row.user_id },
         { name: "Username", selector: row => row.username },
         { name: "Role", selector: row => row.role },
         { name: "Email", selector: row => row.email },
