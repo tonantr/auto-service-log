@@ -35,6 +35,8 @@ function CarList() {
     }, [navigate]);
 
     const columns = [
+        { name: "ID", selector: row => row.car_id },
+        { name: "Owner", selector: row => row.owner },
         { name: "Name", selector: row => row.name },
         { name: "Model", selector: row => row.model },
         { name: "Year", selector: row => row.year },

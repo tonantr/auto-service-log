@@ -35,10 +35,10 @@ def get_users():
 @admin_bp.route("/cars", methods=["GET"])
 def get_cars():
     try:
-        cars = AdminService.get_all_cars()
+        cars = AdminService.get_cars_with_user_name()
 
         if cars:
-            return jsonify([car.to_dict() for car in cars]), 200
+            return jsonify(cars), 200
         else:
             logging.warning(ERROR_NO_CARS_FOUND)
             return jsonify(message=ERROR_NO_CARS_FOUND), 404

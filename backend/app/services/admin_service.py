@@ -35,17 +35,32 @@ class AdminService:
             return []
     
     @staticmethod
-    def get_all_cars():
+    def get_cars_with_user_name():
         try:
-            cars = Car.query.all()
+            cars = (
+                db.session.query(Car, User.username.label("owner"))
+                .join(User, Car.user_id == User.user_id)
+                .all()
+            )
             if cars:
                 logger.info(RETRIEVAL_SUCCESS)
-                return cars
+                car_list = []
+                for car, owner in cars:
+                    car_list.append({
+                        "car_id": car.car_id,
+                        "user_id": car.user_id,
+                        "owner": owner,
+                        "name": car.name,
+                        "model": car.model,
+                        "year": car.year,
+                        "vin": car.vin,
+                    })
+                return car_list
             else:
                 logger.warning(ERROR_NO_CARS_FOUND)
                 return []
         except Exception as e:
-            logger.error(f"Error in get_all_cars: {str(e)}")
+            logger.error(f"Error in get_cars_with_user_name: {str(e)}")
             return []
 
     @staticmethod
@@ -76,7 +91,7 @@ class AdminService:
                 logger.warning(ERROR_NO_SERVICES_FOUND)
                 return []
         except Exception as e:
-            logger.error(f"Error in get_all_services: {str(e)}")
+            logger.error(f"Error in get_services_with_car_name: {str(e)}")
             return []
 
     @staticmethod

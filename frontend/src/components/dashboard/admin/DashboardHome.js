@@ -39,6 +39,7 @@ function DashboardHome() {
     return (
         <div>
             {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
+            <h3>Dashboard Totals</h3>
             <p>Total Users: {dashboardData.total_users}</p>
             <p>Total Cars: {dashboardData.total_cars}</p>
             <p>Total Services: {dashboardData.total_services}</p>
