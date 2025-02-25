@@ -38,9 +38,10 @@ function DashboardHome() {
 
     return (
         <div>
-            <h3><strong>Total Users:</strong> {dashboardData.total_users}</h3>
-            <h3><strong>Total Cars:</strong> {dashboardData.total_cars}</h3>
-            <h3><strong>Total Services:</strong> {dashboardData.total_services}</h3>
+            {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
+            <p>Total Users: {dashboardData.total_users}</p>
+            <p>Total Cars: {dashboardData.total_cars}</p>
+            <p>Total Services: {dashboardData.total_services}</p>
         </div>
     );
 }

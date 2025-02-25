@@ -22,7 +22,7 @@ function AdminDashboard() {
     };
 
     if (isAuthenticated === null) {
-        return <div>Loading...</div>; 
+        return <div>Loading...</div>;
     }
 
     if (!isAuthenticated) {
@@ -50,6 +50,7 @@ function AdminDashboard() {
                     <Outlet />
                 </div>
             </div>
+
         </div>
     );
 }

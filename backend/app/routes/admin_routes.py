@@ -4,6 +4,7 @@ from app.services.admin_service import AdminService
 from app.utils.constants import (
     ERROR_FETCHING_DATA,
     ERROR_NO_USERS_FOUND,
+    ERROR_NO_CARS_FOUND,
 )
 
 admin_bp = Blueprint("admin_bp", __name__)
@@ -30,6 +31,21 @@ def get_users():
         logging.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
 
+
+@admin_bp.route("/cars", methods=["GET"])
+def get_cars():
+    try:
+        cars = AdminService.get_all_cars()
+
+        if cars:
+            return jsonify([car.to_dict() for car in cars]), 200
+        else:
+            logging.warning(ERROR_NO_CARS_FOUND)
+            return jsonify(message=ERROR_NO_CARS_FOUND), 404
+
+    except Exception as e:
+        logging.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
+        return jsonify(message=ERROR_FETCHING_DATA), 500
 
 @admin_bp.route('/dashboard_home', methods=['GET'])
 def get_dashboard_data():

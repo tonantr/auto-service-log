@@ -29,6 +29,19 @@ class AdminService:
         except Exception as e:
             logger.error(f"Error in get_all_users: {str(e)}")
             return None
+    
+    @staticmethod
+    def get_all_cars():
+        try:
+            cars = Car.query.all()
+            if cars:
+                logger.info(RETRIEVAL_SUCCESS)
+                return cars
+            else:
+                logger.warning(ERROR_NO_USERS_FOUND)
+        except Exception as e:
+            logger.error(f"Error in get_all_cars: {str(e)}")
+            return None
 
     @staticmethod
     def get_total_users():

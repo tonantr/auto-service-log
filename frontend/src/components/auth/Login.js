@@ -41,7 +41,7 @@ function Login() {
             <form onSubmit={login}>
                 <div style={{ marginBottom: '10px' }}>
                     <div>
-                        <label htmlFor="username">Username:</label>
+                        <label htmlFor="username">Username</label>
                     </div>
                     <input
                         id="username"
@@ -54,7 +54,7 @@ function Login() {
                 </div>
                 <div style={{ marginBottom: '10px' }}>
                     <div>
-                        <label htmlFor="password">Password:</label>
+                        <label htmlFor="password">Password</label>
                     </div>
                     <input
                         id="password"
