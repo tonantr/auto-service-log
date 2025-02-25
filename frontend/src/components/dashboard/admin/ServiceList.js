@@ -34,15 +34,22 @@ function ServiceList() {
             });
     }, [navigate]);
 
+    const truncateText = (text) => {
+        if (text && text.length > 30) {
+            return text.substring(0, 30) + "...";
+        }
+        return text;
+    };
+
     const columns = [
         { name: "ID", selector: row => row.service_id },
         { name: "Car Name", selector: row => row.car_name },
         { name: "Mileage", selector: row => row.mileage },
-        { name: "Service Type", selector: row => row.service_type },
+        { name: "Service Type", selector: row => truncateText(row.service_type) },
         { name: "Service Date", selector: row => row.service_date },
         { name: "Next Service Date", selector: row => row.next_service_date },
         { name: "Cost", selector: row => row.cost },
-        { name: "Notes", selector: row => row.notes },
+        { name: "Notes", selector: row => truncateText(row.notes) },
     ];
 
     return (
