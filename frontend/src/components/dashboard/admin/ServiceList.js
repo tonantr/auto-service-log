@@ -41,11 +41,20 @@ function ServiceList() {
         return text;
     };
 
+    const formatDate = (date) => {
+        if (!date) return "N/A";
+        return new Date(date).toLocaleDateString("en-CA", {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+        });
+    };
+
     const columns = [
         { name: "ID", selector: row => row.service_id },
         { name: "Car Name", selector: row => row.car_name },
         { name: "Mileage", selector: row => row.mileage },
-        { 
+        {
             name: "Service Type", selector: row => (
                 <td title={row.service_type}>
                     {truncateText(row.service_type)}
@@ -53,8 +62,11 @@ function ServiceList() {
             )
 
         },
-        { name: "Service Date", selector: row => row.service_date },
-        { name: "Next Service Date", selector: row => row.next_service_date },
+        { name: "Service Date", selector: row => formatDate(row.service_date) },
+        {
+            name: "Next Service Date",
+            selector: row => row.next_service_date ? formatDate(row.next_service_date) : "N/A"
+        },
         { name: "Cost", selector: row => row.cost },
         {
             name: "Notes", selector: row => (
