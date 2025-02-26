@@ -41,14 +41,6 @@ function App() {
           <Route path="services" element={<ServiceList />} />
           <Route path="search-results" element={<SearchResults />} />
         </Route>
-        {/* <Route
-          path="/search-results"
-          element={
-            <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <SearchResults />
-            </ProtectedRoute>
-          }
-        /> */}
       </Routes>
     </Router>
   );

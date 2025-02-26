@@ -78,7 +78,6 @@ def get_dashboard_data():
         logging.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
     
-
 @admin_bp.route('/search', methods=['GET'])
 def search():
     try:

@@ -156,7 +156,6 @@ class AdminService:
             cars = [car.to_dict() for car in cars]
             services = [service.to_dict() for service in services]
 
-
             return {"users": users, "cars": cars, "services": services}
         except Exception as e:
             logger.error(f"Error in search: {str(e)}")
