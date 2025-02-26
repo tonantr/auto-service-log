@@ -28,7 +28,9 @@ function AdminDashboard() {
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
-        console.log("Search query:", searchQuery); 
+        if (searchQuery.trim()) {
+            navigate(`/admin/search-results?query=${encodeURIComponent(searchQuery)}`);
+        }
     };
 
     if (isAuthenticated === null) {

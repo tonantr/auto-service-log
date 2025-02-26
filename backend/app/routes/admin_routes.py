@@ -1,5 +1,5 @@
 import logging
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from app.services.admin_service import AdminService
 from app.utils.constants import (
     ERROR_FETCHING_DATA,
@@ -74,6 +74,23 @@ def get_dashboard_data():
             'total_cars': total_cars,
             'total_services': total_services
         })
+    except Exception as e:
+        logging.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
+        return jsonify(message=ERROR_FETCHING_DATA), 500
+    
+
+@admin_bp.route('/search', methods=['GET'])
+def search():
+    try:
+        query = request.args.get('query', '')
+
+        if not query:
+            return jsonify({'users': [], 'cars': [], 'services': []})
+        
+        result = AdminService.search(query)
+
+        return jsonify(result)
+
     except Exception as e:
         logging.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500

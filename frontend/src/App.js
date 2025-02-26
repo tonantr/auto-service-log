@@ -7,7 +7,8 @@ import UserList from "./components/dashboard/admin/UserList";
 import CarList from "./components/dashboard/admin/CarList";
 import ServiceList from "./components/dashboard/admin/ServiceList";
 import DashboardHome from "./components/dashboard/admin/DashboardHome";
-import './App.css'; 
+import SearchResults from "./components/dashboard/admin/SearchResults";
+import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -38,7 +39,16 @@ function App() {
           <Route path="users" element={<UserList />} />
           <Route path="cars" element={<CarList />} />
           <Route path="services" element={<ServiceList />} />
+          <Route path="search-results" element={<SearchResults />} />
         </Route>
+        {/* <Route
+          path="/search-results"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <SearchResults />
+            </ProtectedRoute>
+          }
+        /> */}
       </Routes>
     </Router>
   );
