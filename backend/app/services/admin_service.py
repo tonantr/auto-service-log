@@ -153,8 +153,15 @@ class AdminService:
             ).all()
 
             users = [user.to_dict() for user in users]
-            cars = [car.to_dict() for car in cars]
-            services = [service.to_dict() for service in services]
+            cars = [{**car.to_dict(), "username": car.user.username} for car in cars]
+
+            services = [
+                {
+                    **service.to_dict(),
+                    "car_name": service.car.name if service.car else None,
+                }
+                for service in services
+            ]
 
             return {"users": users, "cars": cars, "services": services}
         except Exception as e:

@@ -14,7 +14,8 @@ class Car(db.Model):
     year = db.Column(db.Integer, nullable=False)
     vin = db.Column(db.String(17), nullable=False)
 
-    services = db.relationship("Service", backref="car", cascade="all, delete-orphan")
+    services = db.relationship('Service', back_populates='car', cascade="all, delete-orphan")
+    user = db.relationship('User', back_populates='cars')
 
     def to_dict(self, include_services=False):
         car_dict = {

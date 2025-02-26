@@ -30,6 +30,7 @@ function AdminDashboard() {
         e.preventDefault();
         if (searchQuery.trim()) {
             navigate(`/admin/search-results?query=${encodeURIComponent(searchQuery)}`);
+            setSearchQuery("");
         }
     };
 

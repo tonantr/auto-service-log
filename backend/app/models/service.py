@@ -15,6 +15,8 @@ class Service(db.Model):
     cost = db.Column(db.Numeric(10, 2), nullable=False)
     notes = db.Column(db.Text, nullable=True)
 
+    car = db.relationship('Car', back_populates='services')
+
     def to_dict(self):
         return {
             "service_id": self.service_id,

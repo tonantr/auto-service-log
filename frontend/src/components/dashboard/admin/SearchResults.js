@@ -19,7 +19,6 @@ function SearchResults() {
             try {
                 setLoading(true);
                 const response = await axios.get(`/admin/search?query=${query}`);
-                console.log(response.data);
                 setResults(response.data);
             } catch (error) {
                 setError("An error occurred while fetching results.");
@@ -33,7 +32,7 @@ function SearchResults() {
     }, [query]);
 
     const getColumnsAndData = () => {
-        const { users, cars, services } = results;
+        const { users = [], cars = [], services = [] } = results || {};
 
         if (users.length > 0) {
             return {
@@ -49,7 +48,7 @@ function SearchResults() {
             return {
                 columns: [
                     { name: "ID", selector: row => row.car_id },
-                    { name: "Owner", selector: row => row.owner },
+                    { name: "Owner", selector: row => row.username },
                     { name: "Name", selector: row => row.name },
                     { name: "Model", selector: row => row.model },
                     { name: "Year", selector: row => row.year },

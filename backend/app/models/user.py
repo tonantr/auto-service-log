@@ -11,7 +11,7 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
 
-    cars = db.relationship("Car", backref="user", cascade="all, delete-orphan")
+    cars = db.relationship('Car', back_populates='user', cascade="all, delete-orphan")
 
     def to_dict(self, include_cars=False):
         user_dict = {
