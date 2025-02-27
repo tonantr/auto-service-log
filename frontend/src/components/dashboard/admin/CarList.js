@@ -47,7 +47,7 @@ function CarList() {
             <button>Add</button>
             {error && <p>{error}</p>}
 
-            <table>
+            <table style={{ marginTop: "10px" }}>
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -77,7 +77,7 @@ function CarList() {
                 </tbody>
             </table>
 
-            <div>
+            <div style={{ marginTop: "20px" }}>
                 <button onClick={handlePreviousPage} disabled={page === 1}>
                     Previous
                 </button>

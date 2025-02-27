@@ -131,7 +131,7 @@ function SearchResults() {
                         </tbody>
                     </table>
 
-                    <div>
+                    <div style={{ marginTop: "20px" }}>
                         <button
                             onClick={handlePreviousPage}
                             disabled={page === 1}
