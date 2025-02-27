@@ -28,10 +28,8 @@ function UserList() {
         window.confirm("Are you sure?")
     }
 
-
     useEffect(() => {
-        const token = localStorage.getItem('access_token');
-        console.log('token:', token)
+        const token = localStorage.getItem('access_token'); 
 
         if (!token) {
             navigate("/login");
@@ -53,6 +51,7 @@ function UserList() {
 
         fetchUsers();
     }, [page, perPage, navigate]);
+
 
     return (
         <div>
