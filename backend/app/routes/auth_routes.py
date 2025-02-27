@@ -20,10 +20,10 @@ def login():
         return jsonify(message="Username and password are required"), 400
 
     try:
-        success, access_token, role = authenticate(username, password)
+        success, access_token, role, username = authenticate(username, password)
 
         if success:
-            return jsonify(access_token=access_token, role=role), 200
+            return jsonify(access_token=access_token, role=role, username=username), 200
         else:
             return jsonify(message="Invalid credentials"), 401
     except Exception as e:

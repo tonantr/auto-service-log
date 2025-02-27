@@ -20,6 +20,8 @@ function Login() {
             if (response.status === 200) {
                 setError(null);
                 localStorage.setItem('access_token', response.data.access_token);
+                localStorage.setItem('role', response.data.role);
+                localStorage.setItem('username', response.data.username); 
 
                 if (response.data.role === 'admin') {
                     navigate('/admin');

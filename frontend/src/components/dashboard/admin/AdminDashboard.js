@@ -3,19 +3,28 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 
 function AdminDashboard() {
     const [searchQuery, setSearchQuery] = useState('');
+    const [loggedInUser, setLoggedInUser] = useState('');
+    const [role, setRole] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
+        const username = localStorage.getItem('username');
+        const userRole = localStorage.getItem('role');
 
         if (!token) {
             navigate("/login");
             return;
         }
+
+        setLoggedInUser(username);
+        setRole(userRole);
     }, [navigate]);
 
     const handleLogout = () => {
         localStorage.removeItem('access_token');
+        localStorage.removeItem('username');
+        localStorage.removeItem('role');
         navigate("/login");
     };
 
@@ -47,6 +56,7 @@ function AdminDashboard() {
             <div className="main-content">
                 <div className="header">
                     <h2>Admin Dashboard</h2>
+                    <p><strong>Signed in as:</strong> {loggedInUser} ({role})</p>
                     <form onSubmit={handleSearchSubmit}>
                         <input
                             type="text"

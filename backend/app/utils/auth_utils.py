@@ -91,7 +91,7 @@ def authenticate(username, password):
             if verify_password(password, stored_password):
                 role = user.role
                 access_token = generate_token(username)
-                return True, access_token, role
+                return True, access_token, role, username
             
             logger.warning(f"Incorrect password for user '{username}'")
             return False, None, None
