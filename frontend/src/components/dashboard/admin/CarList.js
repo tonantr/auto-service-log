@@ -16,6 +16,18 @@ function CarList() {
         paginationControls,
     } = usePagination();
 
+    const handleAddCar = () => {
+        window.confirm("Are you sure?")
+    };
+
+    const handleUpdateCar = (carId) => {
+        window.confirm("Are you sure?")
+    };
+
+    const handleDeleteCar = (carId) => {
+        window.confirm("Are you sure?")
+    }
+
     useEffect(() => {
         const token = localStorage.getItem('access_token');
 
@@ -42,7 +54,7 @@ function CarList() {
     return (
         <div>
             <h3>Car List</h3>
-            <button>Add</button>
+            <button onClick={handleAddCar}>Add</button>
             {error && <p>{error}</p>}
 
             <table style={{ marginTop: "10px" }}>
@@ -67,8 +79,8 @@ function CarList() {
                             <td>{car.year}</td>
                             <td>{car.vin}</td>
                             <td>
-                                <button>Update</button>
-                                <button>Delete</button>
+                                <button onClick={handleUpdateCar}>Update</button>
+                                <button onClick={handleDeleteCar}>Delete</button>
                             </td>
                         </tr>
                     ))}

@@ -16,9 +16,22 @@ function UserList() {
         paginationControls,
     } = usePagination();
 
+    const handleAddUser = () => {
+        window.confirm("Are you sure?")
+    };
+
+    const handleUpdateUser = (userId) => {
+        window.confirm("Are you sure?")
+    };
+
+    const handleDeleteUser = (userId) => {
+        window.confirm("Are you sure?")
+    }
+
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
+        console.log(token)
 
         if (!token) {
             navigate("/login");
@@ -44,7 +57,7 @@ function UserList() {
     return (
         <div>
             <h3>User List</h3>
-            <button>Add</button>
+            <button onClick={handleAddUser}>Add</button>
             {error && <p>{error}</p>}
 
             <table style={{ marginTop: "10px" }}>
@@ -65,8 +78,8 @@ function UserList() {
                             <td>{user.role}</td>
                             <td>{user.email}</td>
                             <td>
-                                <button>Update</button>
-                                <button>Delete</button>
+                                <button onClick={handleUpdateUser}>Update</button>
+                                <button onClick={handleDeleteUser}>Delete</button>
                             </td>
                         </tr>
                     ))}

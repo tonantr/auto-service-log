@@ -16,6 +16,18 @@ function ServiceList() {
         paginationControls,
     } = usePagination();
 
+    const handleAddService = () => {
+        window.confirm("Are you sure?")
+    };
+
+    const handleUpdateService = (serviceId) => {
+        window.confirm("Are you sure?")
+    };
+
+    const handleDeleteService = (serviceId) => {
+        window.confirm("Are you sure?")
+    }
+
     useEffect(() => {
         const token = localStorage.getItem('access_token');
 
@@ -58,7 +70,7 @@ function ServiceList() {
     return (
         <div>
             <h3>Service List</h3>
-            <button>Add</button>
+            <button onClick={handleAddService}>Add</button>
             {error && <p>{error}</p>}
 
             <table style={{ marginTop: "10px" }}>
@@ -89,8 +101,8 @@ function ServiceList() {
                                 {truncateText(service.notes)}
                             </td>
                             <td>
-                                <button>Update</button>
-                                <button>Delete</button>
+                                <button onClick={handleUpdateService}>Update</button>
+                                <button onClick={handleDeleteService}>Delete</button>
                             </td>
                         </tr>
                     ))}
