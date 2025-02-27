@@ -1,14 +1,9 @@
 import logging
 from flask import Blueprint, request, jsonify
 from app.utils.auth_utils import authenticate
+from app.utils.logging_config import logger
 
 auth_bp = Blueprint("auth_routes", __name__)
-
-logging.basicConfig(
-    filename="app.log",
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(module)s - Line: %(lineno)d - %(message)s",
-)
 
 
 @auth_bp.route("/", methods=["POST"])
@@ -25,7 +20,8 @@ def login():
         if success:
             return jsonify(access_token=access_token, role=role, username=username), 200
         else:
+            logger.warning(f"Invalid login attempt for username: {username}")
             return jsonify(message="Invalid credentials"), 401
     except Exception as e:
-        logging.error(f"Error during login: {e}")
+        logger.error(f"Error during login: {e}")
         return jsonify(message="An error occurred while processing your request"), 500
