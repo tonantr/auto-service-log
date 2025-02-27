@@ -1,8 +1,8 @@
-import { use, useState } from "react";
+import { useState } from "react";
 
 function usePagination(initialPage = 1, initialPerPage = 10) {
     const [page, setPage] = useState(initialPage);
-    const [perPage] = useState(initialPerPage);
+    const [perPage, setPerPage] = useState(initialPerPage);
     const [totalPages, setTotalPages] = useState(0);
 
     const handleNextPage = () => {
@@ -20,6 +20,7 @@ function usePagination(initialPage = 1, initialPerPage = 10) {
     return {
         page,
         perPage,
+        setPerPage,
         totalPages,
         handleNextPage,
         handlePreviousPage,

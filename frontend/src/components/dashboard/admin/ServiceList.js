@@ -6,7 +6,6 @@ import usePagination from "../../../usePagination";
 function ServiceList() {
     const [services, setServices] = useState([]);
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -34,15 +33,13 @@ function ServiceList() {
                 });
                 setServices(response.data.services);
                 setTotalPagesCount(response.data.total_pages);
-                setLoading(true);
             } catch (error) {
                 setError('Failed to load services.');
-                setLoading(false);
             }
         };
 
         fetchServices();
-    }, [page, perPage, navigate, setTotalPagesCount]);
+    }, [page, perPage, navigate]);
 
     const truncateText = (text) => {
         if (text && text.length > 30) {
@@ -64,7 +61,6 @@ function ServiceList() {
         <div>
             <h3>Service List</h3>
             <button>Add</button>
-            {loading && <p>Loading services...</p>}
             {error && <p>{error}</p>}
 
             <table>

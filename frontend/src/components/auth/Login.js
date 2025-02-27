@@ -9,14 +9,13 @@ function Login() {
 
     const navigate = useNavigate();
 
-    const login = async function(e) {
+    const login = async function (e) {
         e.preventDefault();
 
         try {
             const response = await axios.post('/', {
                 username, password,
             });
-            console.log(response.date);
 
             if (response.status === 200) {
                 setError(null);
@@ -65,7 +64,7 @@ function Login() {
                         className="input-button"
                     />
                 </div>
-                <button type="submit" style={{ marginTop: '10px'}} className="input-button">Login</button>
+                <button type="submit" style={{ marginTop: '10px' }} className="input-button">Login</button>
             </form>
 
             {error && <p className="error">{error}</p>}

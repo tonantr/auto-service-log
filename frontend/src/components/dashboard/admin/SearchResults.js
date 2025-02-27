@@ -9,10 +9,9 @@ function SearchResults() {
     const query = queryParams.get("query");
 
     const [results, setResults] = useState({ users: [], cars: [], services: [] });
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-     const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const {
         page,
@@ -33,29 +32,21 @@ function SearchResults() {
 
         const fetchResults = async () => {
             if (!query) return;
-
-            setLoading(true);
-
             try {
                 const response = await axios.get(`/admin/search?query=${query}`, {
                     headers: { Authorization: `Bearer ${token}` },
                     params: { page, per_page: perPage },
                 });
 
-                console.log("API Response:", response.data);
-
                 setResults({
                     users: response.data.users?.data || [],
                     cars: response.data.cars?.data || [],
                     services: response.data.services?.data || [],
                 });
-
                 setTotalPagesCount(response.data.total_pages || 0);
             } catch (error) {
                 setError("An error occurred while fetching results.");
                 console.error("Search error:", error);
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -113,13 +104,9 @@ function SearchResults() {
             <h3>
                 Search Results for "{query}"
             </h3>
-
             {error && <p>{error}</p>}
-            {loading ? (
-                <p>Loading...</p>
-            ) : data.length === 0 ? (
-                <p>No results found.</p>
-            ) : (
+            {data.length === 0 && <p>No results found.</p>}
+            {data.length > 0 && (
                 <div>
                     <table>
                         <thead>

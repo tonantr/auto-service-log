@@ -6,7 +6,6 @@ import usePagination from "../../../usePagination";
 function UserList() {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -36,21 +35,18 @@ function UserList() {
                 });
                 setUsers(response.data.users);
                 setTotalPagesCount(response.data.total_pages);
-                setLoading(true);
             } catch (error) {
                 setError('Failed to load users.');
-                setLoading(false);
             }
         };
 
         fetchUsers();
-    }, [page, perPage, navigate, setTotalPagesCount]);
+    }, [page, perPage, navigate]);
 
     return (
         <div>
             <h3>User List</h3>
             <button>Add</button>
-            {loading && <p>Loading services...</p>}
             {error && <p>{error}</p>}
 
             <table>

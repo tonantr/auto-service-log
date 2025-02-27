@@ -6,7 +6,6 @@ import usePagination from "../../../usePagination";
 function CarList() {
     const [cars, setCars] = useState([]);
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -34,21 +33,18 @@ function CarList() {
                 });
                 setCars(response.data.cars);
                 setTotalPagesCount(response.data.total_pages);
-                setLoading(true);
             } catch (error) {
                 setError('Failed to load cars.');
-                setLoading(false);
             }
         };
 
         fetchCars();
-    }, [page, perPage, navigate, setTotalPagesCount]);
+    }, [page, perPage, navigate]);
 
     return (
         <div>
             <h3>Car List</h3>
             <button>Add</button>
-            {loading && <p>Loading services...</p>}
             {error && <p>{error}</p>}
 
             <table>
