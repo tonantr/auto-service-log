@@ -12,10 +12,8 @@ function ServiceList() {
     const {
         page,
         perPage,
-        totalPages,
-        handleNextPage,
-        handlePreviousPage,
         setTotalPagesCount,
+        paginationControls,
     } = usePagination();
 
     useEffect(() => {
@@ -99,15 +97,7 @@ function ServiceList() {
                 </tbody>
             </table>
 
-            <div style={{ marginTop: "20px" }}>
-                <button onClick={handlePreviousPage} disabled={page === 1}>
-                    Previous
-                </button>
-                <span> Page {page} of {totalPages} </span>
-                <button onClick={handleNextPage} disabled={page === totalPages}>
-                    Next
-                </button>
-            </div>
+            {paginationControls}
         </div>
     );
 }

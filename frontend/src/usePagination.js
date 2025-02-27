@@ -17,14 +17,24 @@ function usePagination(initialPage = 1, initialPerPage = 10) {
         setTotalPages(total);
     };
 
+    const paginationControls = (
+        <div style={{ marginTop: "20px" }}>
+            <button onClick={handlePreviousPage} disabled={page === 1}>
+                Previous
+            </button>
+            <span> Page {page} of {totalPages} </span>
+            <button onClick={handleNextPage} disabled={page === totalPages}>
+                Next
+            </button>
+        </div>
+    );
+
     return {
         page,
         perPage,
         setPerPage,
-        totalPages,
-        handleNextPage,
-        handlePreviousPage,
         setTotalPagesCount,
+        paginationControls,
     };
 }
 
