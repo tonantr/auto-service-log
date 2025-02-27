@@ -1,6 +1,8 @@
 import logging
 from flask import Blueprint, jsonify, request
 from app.services.admin_service import AdminService
+from app.utils.auth_utils import token_required
+from app.utils.logging_config import logger
 from app.utils.constants import (
     ERROR_FETCHING_DATA,
     ERROR_NO_USERS_FOUND,
@@ -10,15 +12,10 @@ from app.utils.constants import (
 
 admin_bp = Blueprint("admin_bp", __name__)
 
-logging.basicConfig(
-    filename="app.log",
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(module)s - Line: %(lineno)d - %(message)s",
-)
-
 
 @admin_bp.route("/users", methods=["GET"])
-def get_users():
+@token_required
+def get_users(current_user):
     try:
         page = request.args.get('page', default=1, type=int)
         per_page = request.args.get('per_page', default=10, type=int)
@@ -28,15 +25,16 @@ def get_users():
         if users:
             return jsonify(users), 200
         else:
-            logging.warning(ERROR_NO_USERS_FOUND)
+            logger.warning(ERROR_NO_USERS_FOUND)
             return jsonify(message=ERROR_NO_USERS_FOUND), 404
 
     except Exception as e:
-        logging.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
+        logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
 
 @admin_bp.route("/cars", methods=["GET"])
-def get_cars():
+@token_required
+def get_cars(current_user):
     try:
         page = request.args.get('page', default=1, type=int)
         per_page = request.args.get('per_page', default=10, type=int)
@@ -46,15 +44,16 @@ def get_cars():
         if cars:
             return jsonify(cars), 200
         else:
-            logging.warning(ERROR_NO_CARS_FOUND)
+            logger.warning(ERROR_NO_CARS_FOUND)
             return jsonify(message=ERROR_NO_CARS_FOUND), 404
 
     except Exception as e:
-        logging.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
+        logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
 
 @admin_bp.route("/services", methods=["GET"])
-def get_services():
+@token_required
+def get_services(current_user):
     try:
         page = request.args.get('page', default=1, type=int)
         per_page = request.args.get('per_page', default=10, type=int)
@@ -64,15 +63,16 @@ def get_services():
         if services:
              return jsonify(services), 200
         else:
-            logging.warning(ERROR_NO_SERVICES_FOUND)
+            logger.warning(ERROR_NO_SERVICES_FOUND)
             return jsonify(message=ERROR_NO_SERVICES_FOUND), 404
 
     except Exception as e:
-        logging.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
+        logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
 
 @admin_bp.route('/dashboard_home', methods=['GET'])
-def get_dashboard_data():
+@token_required
+def get_dashboard_data(current_user):
     try:
         total_users = AdminService.get_total_users()
         total_cars = AdminService.get_total_cars()
@@ -82,13 +82,14 @@ def get_dashboard_data():
             'total_users': total_users,
             'total_cars': total_cars,
             'total_services': total_services
-        })
+        }), 200
     except Exception as e:
-        logging.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
+        logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
     
 @admin_bp.route('/search', methods=['GET'])
-def search():
+@token_required
+def search(current_user):
     try:
         page = request.args.get('page', default=1, type=int)
         per_page = request.args.get('per_page', default=10, type=int)
@@ -100,10 +101,10 @@ def search():
         
         result = AdminService.search(query, page=page, per_page=per_page)
 
-        return jsonify(result)
+        return jsonify(result), 200
 
     except Exception as e:
-        logging.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
+        logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
     
 

@@ -3,6 +3,7 @@ from sqlalchemy.sql import or_
 from app.models.user import User
 from app.models.car import Car
 from app.models.service import Service
+from app.utils.logging_config import logger
 from app.database.database import db
 from app.utils.constants import (
     RETRIEVAL_SUCCESS,
@@ -10,14 +11,6 @@ from app.utils.constants import (
     ERROR_NO_CARS_FOUND,
     ERROR_NO_SERVICES_FOUND,
 )
-
-
-logging.basicConfig(
-    filename="app.log",
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(module)s - Line: %(lineno)d - %(message)s",
-)
-logger = logging.getLogger(__name__)
 
 
 class AdminService:

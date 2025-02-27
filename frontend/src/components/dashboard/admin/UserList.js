@@ -31,7 +31,7 @@ function UserList() {
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
-        console.log(token)
+        console.log('token:', token)
 
         if (!token) {
             navigate("/login");

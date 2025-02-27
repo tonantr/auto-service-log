@@ -1,18 +1,39 @@
+from flask import request, jsonify
 import logging
 import jwt
 import os
 import datetime
+from functools import wraps
 from bcrypt import hashpw, gensalt, checkpw
 from app.models.user import User
 from app.database.database import db
+from app.utils.logging_config import logger
 
 SECRET_KEY = os.getenv("FLASK_SECRET_KEY")
 
-logging.basicConfig(
-    filename="app.log",
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(module)s - Line: %(lineno)d - %(message)s",
-)
+
+def token_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        token = None
+
+        if "Authorization" in request.headers:
+            token = request.headers["Authorization"].split(" ")[1]
+
+        if not token:
+            return jsonify({"message": "Token is missing!"}), 403
+
+        try:
+            decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            current_user = decoded_token["username"]
+        except jwt.ExpiredSignatureError:
+            return jsonify({"message": "Token has expired!"}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({"message": "Invalid token!"}), 403
+
+        return f(current_user, *args, **kwargs)
+
+    return decorated_function
 
 
 def hash_password(password):
@@ -38,7 +59,7 @@ def update_password(username, hashed_password):
             db.session.commit()
 
     except Exception as e:
-        logging.error(f"Error in update_password: {e}")
+        logger.error(f"Error in update_password: {e}")
 
 
 def generate_token(username):
@@ -56,6 +77,10 @@ def authenticate(username, password):
     try:
         user = User.query.filter_by(username=username).first()
 
+        if not user:
+            logger.warning(f"User '{username}' not found")
+            return False, None, None
+
         if user:
             stored_password = user.password
             if is_password_plaintext(stored_password):
@@ -67,10 +92,9 @@ def authenticate(username, password):
                 role = user.role
                 access_token = generate_token(username)
                 return True, access_token, role
-            else:
-                return False, None, None
-        else:
-            return False, None
+            
+            logger.warning(f"Incorrect password for user '{username}'")
+            return False, None, None
     except Exception as e:
-        logging.error(f"Error in authenticate: {e}")
+        logger.error(f"Error in authenticate: {e}")
         return False, None
