@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import usePagination from "../../../usePagination";
 
@@ -12,6 +12,8 @@ function SearchResults() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+     const navigate = useNavigate();
+
     const {
         page,
         perPage,
@@ -22,6 +24,13 @@ function SearchResults() {
     } = usePagination();
 
     useEffect(() => {
+        const token = localStorage.getItem("access_token");
+
+        if (!token) {
+            navigate("/login");
+            return;
+        }
+
         const fetchResults = async () => {
             if (!query) return;
 
@@ -29,6 +38,7 @@ function SearchResults() {
 
             try {
                 const response = await axios.get(`/admin/search?query=${query}`, {
+                    headers: { Authorization: `Bearer ${token}` },
                     params: { page, per_page: perPage },
                 });
 
@@ -50,7 +60,7 @@ function SearchResults() {
         };
 
         fetchResults();
-    }, [query, page, perPage]);
+    }, [query, page, perPage, navigate]);
 
     const getColumnsAndData = () => {
         if (results.users.length > 0) {
