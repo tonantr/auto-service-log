@@ -22,31 +22,54 @@ logger = logging.getLogger(__name__)
 
 class AdminService:
     @staticmethod
-    def get_all_users():
+    def get_all_users(page=1, per_page=10):
         try:
-            users = User.query.all()
-            if users:
+            pagination = User.query.paginate(
+                page=page, per_page=per_page, error_out=False
+            )
+            if pagination.items:
                 logger.info(RETRIEVAL_SUCCESS)
-                return users
+                users = [user.to_dict() for user in pagination.items]
+
+                results = {
+                    "users": users,
+                    "total_users": pagination.total,
+                    "total_pages": pagination.pages,
+                    "current_page": pagination.page,
+                    "per_page": pagination.per_page,
+                }
+                return results
             else:
                 logger.warning(ERROR_NO_USERS_FOUND)
-                return []
+                return {
+                    "users": [],
+                    "total_users": 0,
+                    "total_pages": 0,
+                    "current_page": page,
+                    "per_page": per_page,
+                }
         except Exception as e:
             logger.error(f"Error in get_all_users: {str(e)}")
-            return []
+            return {
+                "users": [],
+                "total_users": 0,
+                "total_pages": 0,
+                "current_page": page,
+                "per_page": per_page,
+            }
 
     @staticmethod
-    def get_cars_with_user_name():
+    def get_cars_with_user_name(page=1, per_page=10):
         try:
-            cars = (
+            pagination = (
                 db.session.query(Car, User.username.label("owner"))
                 .join(User, Car.user_id == User.user_id)
-                .all()
+                .paginate(page=page, per_page=per_page, error_out=False)
             )
-            if cars:
+            if pagination.items:
                 logger.info(RETRIEVAL_SUCCESS)
                 car_list = []
-                for car, owner in cars:
+                for car, owner in pagination.items:
                     car_list.append(
                         {
                             "car_id": car.car_id,
@@ -58,26 +81,40 @@ class AdminService:
                             "vin": car.vin,
                         }
                     )
-                return car_list
+                result = {
+                    "cars": car_list,
+                    "total_cars": pagination.total,
+                    "total_pages": pagination.pages,
+                    "current_page": pagination.page,
+                    "per_page": pagination.per_page,
+                }
+                return result
             else:
                 logger.warning(ERROR_NO_CARS_FOUND)
                 return []
         except Exception as e:
             logger.error(f"Error in get_cars_with_user_name: {str(e)}")
-            return []
+            return {
+                "cars": [],
+                "total_cars": 0,
+                "total_pages": 0,
+                "current_page": page,
+                "per_page": per_page,
+            }
 
     @staticmethod
-    def get_services_with_car_name():
+    def get_services_with_car_name(page=1, per_page=10):
         try:
-            services = (
+            pagination = (
                 db.session.query(Service, Car.name.label("car_name"))
                 .join(Car, Service.car_id == Car.car_id)
-                .all()
+                .paginate(page=page, per_page=per_page, error_out=False)
             )
-            if services:
+
+            if pagination.items:
                 logger.info(RETRIEVAL_SUCCESS)
                 service_list = []
-                for service, car_name in services:
+                for service, car_name in pagination.items:
                     service_list.append(
                         {
                             "service_id": service.service_id,
@@ -91,13 +128,33 @@ class AdminService:
                             "notes": service.notes,
                         }
                     )
-                return service_list
+
+                result = {
+                    "services": service_list,
+                    "total_services": pagination.total,
+                    "total_pages": pagination.pages,
+                    "current_page": pagination.page,
+                    "per_page": pagination.per_page,
+                }
+                return result
             else:
                 logger.warning(ERROR_NO_SERVICES_FOUND)
-                return []
+                return {
+                    "services": [],
+                    "total_services": 0,
+                    "total_pages": 0,
+                    "current_page": page,
+                    "per_page": per_page,
+                }
         except Exception as e:
             logger.error(f"Error in get_services_with_car_name: {str(e)}")
-            return []
+            return {
+                "services": [],
+                "total_services": 0,
+                "total_pages": 0,
+                "current_page": page,
+                "per_page": per_page,
+            }
 
     @staticmethod
     def get_total_users():
@@ -124,7 +181,7 @@ class AdminService:
             return 0
 
     @staticmethod
-    def search(query):
+    def search(query, page=1, per_page=10):
         if not query:
             return {"users": [], "cars": [], "services": []}
         try:
@@ -134,7 +191,7 @@ class AdminService:
                     User.role.contains(query),
                     User.email.contains(query),
                 )
-            ).all()
+            ).paginate(page=page, per_page=per_page, error_out=False)
 
             cars = Car.query.filter(
                 or_(
@@ -142,7 +199,7 @@ class AdminService:
                     Car.model.contains(query),
                     Car.vin.contains(query),
                 )
-            ).all()
+            ).paginate(page=page, per_page=per_page, error_out=False)
 
             services = Service.query.filter(
                 or_(
@@ -150,20 +207,38 @@ class AdminService:
                     Service.mileage.contains(query),
                     Service.cost.contains(query),
                 )
-            ).all()
+            ).paginate(page=page, per_page=per_page, error_out=False)
 
-            users = [user.to_dict() for user in users]
-            cars = [{**car.to_dict(), "username": car.user.username} for car in cars]
-
-            services = [
-                {
-                    **service.to_dict(),
-                    "car_name": service.car.name if service.car else None,
-                }
-                for service in services
-            ]
-
-            return {"users": users, "cars": cars, "services": services}
+            return {
+                "users": {
+                    "data": [user.to_dict() for user in users.items],
+                    "total": users.total,
+                    "total_pages": users.pages,
+                    "current_page": users.page,
+                },
+                "cars": {
+                    "data": [
+                        {**car.to_dict(), "username": car.user.username}
+                        for car in cars.items
+                    ],
+                    "total": cars.total,
+                    "total_pages": cars.pages,
+                    "current_page": cars.page,
+                },
+                "services": {
+                    "data": [
+                        {
+                            **service.to_dict(),
+                            "car_name": service.car.name if service.car else None,
+                        }
+                        for service in services.items
+                    ],
+                    "total": services.total,
+                    "total_pages": services.pages,
+                    "current_page": services.page,
+                },
+            }
+        
         except Exception as e:
             logger.error(f"Error in search: {str(e)}")
             return {"users": [], "cars": [], "services": []}

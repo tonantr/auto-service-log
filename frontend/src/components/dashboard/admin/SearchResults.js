@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import PaginatedTable from "../../../PaginatedTable";
+import usePagination from "../../../usePagination";
 
 function SearchResults() {
     const location = useLocation();
@@ -9,17 +9,38 @@ function SearchResults() {
     const query = queryParams.get("query");
 
     const [results, setResults] = useState({ users: [], cars: [], services: [] });
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    const {
+        page,
+        perPage,
+        totalPages,
+        handleNextPage,
+        handlePreviousPage,
+        setTotalPagesCount,
+    } = usePagination();
 
     useEffect(() => {
         const fetchResults = async () => {
             if (!query) return;
 
+            setLoading(true);
+
             try {
-                setLoading(true);
-                const response = await axios.get(`/admin/search?query=${query}`);
-                setResults(response.data);
+                const response = await axios.get(`/admin/search?query=${query}`, {
+                    params: { page, per_page: perPage },
+                });
+
+                console.log("API Response:", response.data);
+
+                setResults({
+                    users: response.data.users?.data || [],
+                    cars: response.data.cars?.data || [],
+                    services: response.data.services?.data || [],
+                });
+
+                setTotalPagesCount(response.data.total_pages || 0);
             } catch (error) {
                 setError("An error occurred while fetching results.");
                 console.error("Search error:", error);
@@ -29,12 +50,10 @@ function SearchResults() {
         };
 
         fetchResults();
-    }, [query]);
+    }, [query, page, perPage]);
 
     const getColumnsAndData = () => {
-        const { users = [], cars = [], services = [] } = results || {};
-
-        if (users.length > 0) {
+        if (results.users.length > 0) {
             return {
                 columns: [
                     { name: "ID", selector: row => row.user_id },
@@ -42,9 +61,10 @@ function SearchResults() {
                     { name: "Role", selector: row => row.role },
                     { name: "Email", selector: row => row.email },
                 ],
-                data: users,
+                data: results.users,
             };
-        } else if (cars.length > 0) {
+        }
+        if (results.cars.length > 0) {
             return {
                 columns: [
                     { name: "ID", selector: row => row.car_id },
@@ -54,9 +74,10 @@ function SearchResults() {
                     { name: "Year", selector: row => row.year },
                     { name: "VIN", selector: row => row.vin },
                 ],
-                data: cars,
+                data: results.cars,
             };
-        } else if (services.length > 0) {
+        }
+        if (results.services.length > 0) {
             return {
                 columns: [
                     { name: "ID", selector: row => row.service_id },
@@ -68,7 +89,7 @@ function SearchResults() {
                     { name: "Cost", selector: row => row.cost },
                     { name: "Notes", selector: row => row.notes },
                 ],
-                data: services,
+                data: results.services,
             };
         }
 
@@ -78,16 +99,59 @@ function SearchResults() {
     const { columns, data } = getColumnsAndData();
 
     return (
-        <div className="p-4">
-            <h1 className="text-xl font-bold mb-4">Search Results for "{query}"</h1>
-            
-            {error && <p className="text-red-500">{error}</p>}
+        <div>
+            <h3>
+                Search Results for "{query}"
+            </h3>
+
+            {error && <p>{error}</p>}
             {loading ? (
-                <p className="text-gray-600 mt-2">Loading...</p>
+                <p>Loading...</p>
             ) : data.length === 0 ? (
                 <p>No results found.</p>
             ) : (
-                <PaginatedTable columns={columns} data={data} />
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                {columns.map((column) => (
+                                    <th key={column.name}>
+                                        {column.name}
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map((row) => (
+                                <tr key={row.service_id || row.car_id || row.user_id}>
+                                    {columns.map((column) => (
+                                        <td key={column.name}>
+                                            {column.selector(row)}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
+                    <div>
+                        <button
+                            onClick={handlePreviousPage}
+                            disabled={page === 1}
+                        >
+                            Previous
+                        </button>
+                        <span>
+                            Page {page} of {totalPages}
+                        </span>
+                        <button
+                            onClick={handleNextPage}
+                            disabled={page === totalPages}
+                        >
+                            Next
+                        </button>
+                    </div>
+                </div>
             )}
         </div>
     );

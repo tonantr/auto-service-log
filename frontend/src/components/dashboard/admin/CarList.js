@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import PaginatedTable from "../../../PaginatedTable";
+import usePagination from "../../../usePagination";
 
 function CarList() {
     const [cars, setCars] = useState([]);
@@ -10,6 +10,15 @@ function CarList() {
 
     const navigate = useNavigate();
 
+    const {
+        page,
+        perPage,
+        totalPages,
+        handleNextPage,
+        handlePreviousPage,
+        setTotalPagesCount,
+    } = usePagination();
+
     useEffect(() => {
         const token = localStorage.getItem('access_token');
 
@@ -17,40 +26,70 @@ function CarList() {
             navigate("/login");
             return;
         }
-
-        axios
-            .get('/admin/cars', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-            .then((response) => {
-                setCars(response.data);
+        const fetchCars = async () => {
+            try {
+                const response = await axios.get('/admin/cars', {
+                    headers: { Authorization: `Bearer ${token}` },
+                    params: { page, per_page: perPage },
+                });
+                setCars(response.data.cars);
+                setTotalPagesCount(response.data.total_pages);
+                setLoading(true);
+            } catch (error) {
+                setError('Failed to load cars.');
                 setLoading(false);
-            })
-            .catch((err) => {
-                setLoading(false);
-                setError("Error fetching users: " + err.message);
-            });
-    }, [navigate]);
+            }
+        };
 
-    const columns = [
-        { name: "ID", selector: row => row.car_id },
-        { name: "Owner", selector: row => row.owner },
-        { name: "Name", selector: row => row.name },
-        { name: "Model", selector: row => row.model },
-        { name: "Year", selector: row => row.year },
-        { name: "VIN", selector: row => row.vin },
-    ];
+        fetchCars();
+    }, [page, perPage, navigate, setTotalPagesCount]);
 
     return (
         <div>
-            {error && <p className="text-red-500">{error}</p>}
-            {loading ? (
-                <p className="text-gray-600 mt-2">Loading...</p>
-            ) : (
-                <PaginatedTable title="Car List" columns={columns} data={cars} />
-            )}
+            <h3>Car List</h3>
+            <button>Add</button>
+            {loading && <p>Loading services...</p>}
+            {error && <p>{error}</p>}
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Owner</th>
+                        <th>Name</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>VIN</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {cars.map((car) => (
+                        <tr key={car.car_id}>
+                            <td>{car.car_id}</td>
+                            <td>{car.owner}</td>
+                            <td>{car.name}</td>
+                            <td>{car.model}</td>
+                            <td>{car.year}</td>
+                            <td>{car.vin}</td>
+                            <td>
+                                <button>Update</button>
+                                <button>Delete</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
+            <div>
+                <button onClick={handlePreviousPage} disabled={page === 1}>
+                    Previous
+                </button>
+                <span> Page {page} of {totalPages} </span>
+                <button onClick={handleNextPage} disabled={page === totalPages}>
+                    Next
+                </button>
+            </div>
         </div>
     );
 }

@@ -20,10 +20,13 @@ logging.basicConfig(
 @admin_bp.route("/users", methods=["GET"])
 def get_users():
     try:
-        users = AdminService.get_all_users()
+        page = request.args.get('page', default=1, type=int)
+        per_page = request.args.get('per_page', default=10, type=int)
+
+        users = AdminService.get_all_users(page=page, per_page=per_page)
 
         if users:
-            return jsonify([user.to_dict() for user in users]), 200
+            return jsonify(users), 200
         else:
             logging.warning(ERROR_NO_USERS_FOUND)
             return jsonify(message=ERROR_NO_USERS_FOUND), 404
@@ -35,7 +38,10 @@ def get_users():
 @admin_bp.route("/cars", methods=["GET"])
 def get_cars():
     try:
-        cars = AdminService.get_cars_with_user_name()
+        page = request.args.get('page', default=1, type=int)
+        per_page = request.args.get('per_page', default=10, type=int)
+
+        cars = AdminService.get_cars_with_user_name(page=page, per_page=per_page)
 
         if cars:
             return jsonify(cars), 200
@@ -50,14 +56,17 @@ def get_cars():
 @admin_bp.route("/services", methods=["GET"])
 def get_services():
     try:
-        services = AdminService.get_services_with_car_name()
+        page = request.args.get('page', default=1, type=int)
+        per_page = request.args.get('per_page', default=10, type=int)
+
+        services = AdminService.get_services_with_car_name(page=page, per_page=per_page)
 
         if services:
-            return jsonify(services), 200
+             return jsonify(services), 200
         else:
             logging.warning(ERROR_NO_SERVICES_FOUND)
             return jsonify(message=ERROR_NO_SERVICES_FOUND), 404
-        
+
     except Exception as e:
         logging.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
@@ -81,15 +90,21 @@ def get_dashboard_data():
 @admin_bp.route('/search', methods=['GET'])
 def search():
     try:
+        page = request.args.get('page', default=1, type=int)
+        per_page = request.args.get('per_page', default=10, type=int)
+
         query = request.args.get('query', '')
 
         if not query:
             return jsonify({'users': [], 'cars': [], 'services': []})
         
-        result = AdminService.search(query)
+        result = AdminService.search(query, page=page, per_page=per_page)
 
         return jsonify(result)
 
     except Exception as e:
         logging.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
+    
+
+
