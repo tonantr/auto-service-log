@@ -1,4 +1,7 @@
 RETRIEVAL_SUCCESS = "Retrieved successfully."
+ADD_SUCCESS = "Added successfully."
+ERROR_USERNAME_EXISTS = "Error: Username exists."
+ERROR_EMAIL_EXISTS = "Error: Email exists."
 ERROR_USER_NOT_FOUND = "Error: User not found."
 ERROR_NO_USERS_FOUND = "Error: No Users Found."
 ERROR_CAR_NOT_FOUND = "Error: Car not found."

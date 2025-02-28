@@ -54,8 +54,9 @@ function CarList() {
     return (
         <div>
             <h3>Car List</h3>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            
             <button onClick={handleAddCar}>Add</button>
-            {error && <p>{error}</p>}
 
             <table style={{ marginTop: "10px" }}>
                 <thead>

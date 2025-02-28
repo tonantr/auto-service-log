@@ -32,6 +32,27 @@ def get_users(current_user):
         logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
 
+@admin_bp.route("/add_user", methods=["POST"])
+@token_required
+def add_user(current_user):
+    try:
+        data = request.get_json()
+
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
+        role = data.get('role', 'user') 
+
+        response = AdminService.add_user(username, email, password, role)
+        if "Error" in response["message"]:
+            return jsonify(response), 400
+
+        return jsonify(response), 200
+
+    except Exception as e:
+        logger.error(f"Error in add_user: {str(e)}")
+        return jsonify({"message": "An unexpected error occurred."}), 500
+
 @admin_bp.route("/cars", methods=["GET"])
 @token_required
 def get_cars(current_user):

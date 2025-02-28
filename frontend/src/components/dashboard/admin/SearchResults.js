@@ -9,7 +9,7 @@ function SearchResults() {
     const query = queryParams.get("query");
 
     const [results, setResults] = useState({ users: [], cars: [], services: [] });
-    const [error, setError] = useState(null);
+    const [error, setError] = useState("");
 
     const navigate = useNavigate();
 
@@ -102,7 +102,7 @@ function SearchResults() {
             <h3>
                 Search Results for "{query}"
             </h3>
-            {error && <p>{error}</p>}
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             {data.length === 0 && <p>No results found.</p>}
             {data.length > 0 && (
                 <div>

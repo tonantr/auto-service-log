@@ -5,8 +5,11 @@ from app.models.car import Car
 from app.models.service import Service
 from app.utils.logging_config import logger
 from app.database.database import db
+from app.utils.auth_utils import hash_password
+from app.utils.validation import validate_username_and_email
 from app.utils.constants import (
     RETRIEVAL_SUCCESS,
+    ADD_SUCCESS,
     ERROR_NO_USERS_FOUND,
     ERROR_NO_CARS_FOUND,
     ERROR_NO_SERVICES_FOUND,
@@ -50,6 +53,24 @@ class AdminService:
                 "current_page": page,
                 "per_page": per_page,
             }
+
+    @staticmethod
+    def add_user(username, email, password, role="user"):
+        try:
+            result = validate_username_and_email(username, email)
+            if result:
+                return result
+            else:
+                password = hash_password(password)
+                new_user = User(username=username, email=email, password=password, role=role)
+                db.session.add(new_user)
+                db.session.commit()
+                logger.info(ADD_SUCCESS)
+                return {"message": ADD_SUCCESS}
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in add_user: {str(e)}")
+            return {"message": "Failed to add user."}
 
     @staticmethod
     def get_cars_with_user_name(page=1, per_page=10):

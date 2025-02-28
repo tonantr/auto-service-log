@@ -70,8 +70,9 @@ function ServiceList() {
     return (
         <div>
             <h3>Service List</h3>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+
             <button onClick={handleAddService}>Add</button>
-            {error && <p>{error}</p>}
 
             <table style={{ marginTop: "10px" }}>
                 <thead>

@@ -17,7 +17,7 @@ function UserList() {
     } = usePagination();
 
     const handleAddUser = () => {
-        window.confirm("Are you sure?")
+        navigate("/admin/add-user")
     };
 
     const handleUpdateUser = (userId) => {

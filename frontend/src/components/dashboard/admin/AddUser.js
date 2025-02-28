@@ -1,0 +1,110 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+function AddUser() {
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [role, setRole] = useState("user");
+    const [error, setError] = useState("");
+
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (password.length < 6) {
+            setError("Password must be at least 6 characters long.");
+            return;
+        }
+
+        const token = localStorage.getItem("access_token");
+
+        if (!token) {
+            navigate("/login")
+            return;
+        }
+
+        const data = { username, email, password, role };
+
+        try {
+            const response = await axios.post("/admin/add_user", data, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (response.status === 200) {
+                setUsername("");
+                setEmail("");
+                setPassword("");
+                setRole("user");
+                navigate("/admin/users")
+            }
+        } catch (err) {
+            if (err.response) {
+                setError(err.response.data.message);
+            } else {
+                setError("Failed to add user.");
+            }
+        }
+    };
+
+    return (
+        <div>
+            <h3>Add User</h3>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <div>
+                        <label>Username</label>
+                    </div>
+                    <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <div>
+                    <div>
+                        <label>Email</label>
+                    </div>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <div>
+                    <div>
+                        <label>Password</label>
+                    </div>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
+
+                <div>
+                    <div>
+                        <label>Role</label>
+                    </div>
+                    <select value={role} onChange={(e) => setRole(e.target.value)}>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+
+                <button style={{ marginTop: '20px' }} type="submit">Add</button>
+            </form>
+    
+        </div>
+    );
+}
+
+export default AddUser;

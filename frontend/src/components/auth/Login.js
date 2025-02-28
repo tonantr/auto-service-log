@@ -48,6 +48,7 @@ function Login( {setIsAuthenticated, setRole}) {
     return (
         <div className="login-container">
             <h3>Login</h3>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             <form onSubmit={login}>
                 <div style={{ marginBottom: '10px' }}>
                     <div>
@@ -78,7 +79,6 @@ function Login( {setIsAuthenticated, setRole}) {
                 <button type="submit" style={{ marginTop: '10px' }} className="input-button">Login</button>
             </form>
 
-            {error && <p className="error">{error}</p>}
         </div>
     );
 };
