@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function Login() {
+function Login( {setIsAuthenticated, setRole}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -17,19 +17,26 @@ function Login() {
                 username, password,
             });
 
-            if (response.status === 200) {
+            if (response.status === 200 && response.data.access_token && response.data.role && response.data.username) {
                 setError(null);
                 localStorage.setItem('access_token', response.data.access_token);
                 localStorage.setItem('role', response.data.role);
-                localStorage.setItem('username', response.data.username); 
+                localStorage.setItem('username', response.data.username);
+
+                setIsAuthenticated(true);
+                setRole(response.data.role);
 
                 if (response.data.role === 'admin') {
                     navigate('/admin');
                 } else if (response.data.role === 'user') {
                     navigate('/user');
                 } else {
+                    setError('Invalid role');
                     navigate('/');
                 }
+
+            } else {
+                setError('Invalid credentials');
             }
         }
         catch (err) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
-function UserDashboard() {
+function UserDashboard({ onLogout }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [loggedInUser, setLoggedInUser] = useState('');
     const [role, setRole] = useState('');
@@ -20,13 +20,6 @@ function UserDashboard() {
         setLoggedInUser(username);
         setRole(userRole);
     }, [navigate]);
-
-    const handleLogout = useCallback(() => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('username');
-        localStorage.removeItem('role');
-        navigate("/login");
-    }, []);
 
     const handleSearchChange = useCallback((e) => {
         setSearchQuery(e.target.value);
@@ -50,7 +43,7 @@ function UserDashboard() {
                     <li><Link to="#" className="sidebar-link">My Cars</Link></li>
                     <li><Link to="#" className="sidebar-link">My Services</Link></li>
                     <li>
-                        <button onClick={handleLogout} className="logout-button">
+                        <button onClick={onLogout} className="logout-button">
                             Logout
                         </button>
                     </li>

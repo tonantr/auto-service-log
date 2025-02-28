@@ -6,7 +6,7 @@ function ProtectedRoute({ isAuthenticated, role, requiredRole, children }) {
         return <Navigate to="/login" replace />;
     }
 
-    if (role !== requiredRole) {
+    if (requiredRole && role !== requiredRole) {
         return <Navigate to="/" replace />;
     }
 

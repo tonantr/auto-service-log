@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
-function AdminDashboard() {
+function AdminDashboard({ onLogout }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [loggedInUser, setLoggedInUser] = useState('');
     const [role, setRole] = useState('');
@@ -21,23 +21,16 @@ function AdminDashboard() {
         setRole(userRole);
     }, [navigate]);
 
-    const handleLogout = useCallback(() => {
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('username');
-            localStorage.removeItem('role');
-            navigate("/login");
-        }, []);
-
     const handleSearchChange = useCallback((e) => {
-           setSearchQuery(e.target.value);
+        setSearchQuery(e.target.value);
     }, []);
 
     const handleSearchSubmit = useCallback((e) => {
-            e.preventDefault();
-            if (searchQuery.trim()) {
-                navigate(`/admin/search-results?query=${encodeURIComponent(searchQuery)}`);
-                setSearchQuery("");
-            }
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            navigate(`/admin/search-results?query=${encodeURIComponent(searchQuery)}`);
+            setSearchQuery("");
+        }
     }, [searchQuery]);
 
     return (
@@ -50,7 +43,7 @@ function AdminDashboard() {
                     <li><Link to="/admin/cars" className="sidebar-link">Cars</Link></li>
                     <li><Link to="/admin/services" className="sidebar-link">Services</Link></li>
                     <li>
-                        <button onClick={handleLogout} className="logout-button">
+                        <button onClick={onLogout} className="logout-button">
                             Logout
                         </button>
                     </li>

@@ -18,23 +18,30 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem('access_token')
     const userRole = localStorage.getItem("role");
+
     if (token) {
       setIsAuthenticated(true)
       setRole(userRole);
     }
-  }, [])
+  }, [isAuthenticated, role])
+
+  const handleLogout = () => {
+    localStorage.clear();
+    setIsAuthenticated(false); 
+    setRole('');
+  };
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} setRole={setRole}/>} />
 
         <Route
           path="/admin"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated} role={role} requiredRole="admin">
-              <AdminDashboard />
+              <AdminDashboard onLogout={handleLogout} />
             </ProtectedRoute>
           }
         >
@@ -49,7 +56,7 @@ function App() {
           path="/user"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated} role={role} requiredRole="user">
-              <UserDashboard />
+              <UserDashboard onLogout={handleLogout} />
             </ProtectedRoute>
           }
         >
