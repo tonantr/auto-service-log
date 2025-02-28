@@ -29,3 +29,6 @@ config.py
 
 # Logging
 app.log
+
+# SQLite database file
+backend/instance/auto_service.db
