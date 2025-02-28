@@ -25,6 +25,8 @@ function Login() {
 
                 if (response.data.role === 'admin') {
                     navigate('/admin');
+                } else if (response.data.role === 'user') {
+                    navigate('/user');
                 } else {
                     navigate('/');
                 }

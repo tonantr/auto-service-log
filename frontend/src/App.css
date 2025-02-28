@@ -36,8 +36,8 @@
 }
 
 .sidebar-link:hover {
-  color: #4caf50; 
-  text-decoration: underline; 
+  color: #6c63ff; 
+  text-decoration: none; 
 }
 
 @keyframes App-logo-spin {
@@ -47,4 +47,18 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.logout-button {
+  background: none;        
+  border: none;            
+  color: inherit;          
+  font: inherit;           
+  cursor: pointer;        
+  text-decoration: none; 
+  padding: 0;             
+}
+
+.logout-button:hover {
+  color: #6c63ff; 
 }

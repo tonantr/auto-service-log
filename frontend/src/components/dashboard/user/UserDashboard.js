@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
-function AdminDashboard() {
+function UserDashboard() {
     const [searchQuery, setSearchQuery] = useState('');
     const [loggedInUser, setLoggedInUser] = useState('');
     const [role, setRole] = useState('');
@@ -12,7 +12,7 @@ function AdminDashboard() {
         const username = localStorage.getItem('username');
         const userRole = localStorage.getItem('role');
 
-        if (!token) {
+        if (!token || userRole !== "user") {
             navigate("/login");
             return;
         }
@@ -22,44 +22,44 @@ function AdminDashboard() {
     }, [navigate]);
 
     const handleLogout = useCallback(() => {
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('username');
-            localStorage.removeItem('role');
-            navigate("/login");
-        }, []);
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('username');
+        localStorage.removeItem('role');
+        navigate("/login");
+    }, []);
 
     const handleSearchChange = useCallback((e) => {
-           setSearchQuery(e.target.value);
+        setSearchQuery(e.target.value);
     }, []);
 
     const handleSearchSubmit = useCallback((e) => {
-            e.preventDefault();
-            if (searchQuery.trim()) {
-                navigate(`/admin/search-results?query=${encodeURIComponent(searchQuery)}`);
-                setSearchQuery("");
-            }
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            setSearchQuery("");
+        }
     }, [searchQuery]);
 
+
     return (
-        <div className="admin-dashboard">
-            <div className="sidebar">
+        <div className="user-dashboard">
+            <aside className="sidebar">
                 <h3>Menu</h3>
                 <ul>
-                    <li><Link to="/admin" className="sidebar-link">Dashboard</Link></li>
-                    <li><Link to="/admin/users" className="sidebar-link">Users</Link></li>
-                    <li><Link to="/admin/cars" className="sidebar-link">Cars</Link></li>
-                    <li><Link to="/admin/services" className="sidebar-link">Services</Link></li>
+                    <li><Link to="/user" className="sidebar-link">Dashboard</Link></li>
+                    <li><Link to="#" className="sidebar-link">Profile</Link></li>
+                    <li><Link to="#" className="sidebar-link">My Cars</Link></li>
+                    <li><Link to="#" className="sidebar-link">My Services</Link></li>
                     <li>
                         <button onClick={handleLogout} className="logout-button">
                             Logout
                         </button>
                     </li>
                 </ul>
-            </div>
+            </aside>
 
-            <div className="main-content">
-                <div className="header">
-                    <h2>Admin Dashboard</h2>
+            <main className="main-content">
+                <header className="header">
+                    <h2>User Dashboard</h2>
                     <p><strong>Signed in as:</strong> {loggedInUser} ({role})</p>
                     <form onSubmit={handleSearchSubmit}>
                         <input
@@ -73,14 +73,13 @@ function AdminDashboard() {
                             Search
                         </button>
                     </form>
-                </div>
-                <div className="content">
+                </header>
+                <section className="content">
                     <Outlet />
-                </div>
-            </div>
-
+                </section>
+            </main>
         </div>
     );
 }
 
-export default AdminDashboard;
+export default UserDashboard;
