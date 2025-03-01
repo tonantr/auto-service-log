@@ -54,7 +54,7 @@ function AddUser() {
             <h3>Add User</h3>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <form onSubmit={handleSubmit}>
-                <div>
+                <div style={{ marginBottom: '10px' }}>
                     <div>
                         <label>Username</label>
                     </div>
@@ -66,7 +66,7 @@ function AddUser() {
                     />
                 </div>
 
-                <div>
+                <div style={{ marginBottom: '10px' }}>
                     <div>
                         <label>Email</label>
                     </div>
@@ -78,7 +78,7 @@ function AddUser() {
                     />
                 </div>
 
-                <div>
+                <div style={{ marginBottom: '10px' }}>
                     <div>
                         <label>Password</label>
                     </div>
@@ -90,7 +90,7 @@ function AddUser() {
                     />
                 </div>
 
-                <div>
+                <div style={{ marginBottom: '10px' }}>
                     <div>
                         <label>Role</label>
                     </div>
@@ -100,7 +100,7 @@ function AddUser() {
                     </select>
                 </div>
 
-                <button style={{ marginTop: '20px' }} type="submit">Add</button>
+                <button style={{ marginTop: '10px' }} type="submit">Add</button>
             </form>
     
         </div>
