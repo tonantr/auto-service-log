@@ -6,6 +6,7 @@ from app.utils.logging_config import logger
 from app.utils.constants import (
     ERROR_FETCHING_DATA,
     ERROR_NO_USERS_FOUND,
+    ERROR_USER_NOT_FOUND,
     ERROR_NO_CARS_FOUND,
     ERROR_NO_SERVICES_FOUND
 )
@@ -32,6 +33,21 @@ def get_users(current_user):
         logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
 
+@admin_bp.route("/user/<int:user_id>", methods=["GET"])
+@token_required
+def get_user(current_user, user_id):
+    try:
+        user = AdminService.get_user(user_id)
+
+        if user:
+            return jsonify(user), 200
+        else:
+            logger.warning(ERROR_USER_NOT_FOUND)
+            return jsonify(message=ERROR_USER_NOT_FOUND), 404
+    except Exception as e:
+        logger.error(f"Error in get_user: {str(e)}")
+        return jsonify({"message": "An unexpected error occurred."}), 500
+
 @admin_bp.route("/add_user", methods=["POST"])
 @token_required
 def add_user(current_user):
@@ -51,6 +67,27 @@ def add_user(current_user):
 
     except Exception as e:
         logger.error(f"Error in add_user: {str(e)}")
+        return jsonify({"message": "An unexpected error occurred."}), 500
+
+@admin_bp.route("/update_user/<int:user_id>", methods=["PUT"])
+@token_required
+def update_user(current_user, user_id):
+    try:
+        data = request.get_json()
+
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
+        role = data.get('role') 
+
+        response = AdminService.update_user(user_id, username, email, password, role)
+        if "Error" in response["message"]:
+            return jsonify(response), 400
+        
+        return jsonify(response), 200
+    
+    except Exception as e:
+        logger.error(f"Error in update_user: {str(e)}")
         return jsonify({"message": "An unexpected error occurred."}), 500
 
 @admin_bp.route("/cars", methods=["GET"])

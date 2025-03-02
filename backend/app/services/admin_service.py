@@ -10,7 +10,9 @@ from app.utils.validation import validate_username_and_email
 from app.utils.constants import (
     RETRIEVAL_SUCCESS,
     ADD_SUCCESS,
+    UPDATE_SUCCESS,
     ERROR_NO_USERS_FOUND,
+    ERROR_USER_NOT_FOUND,
     ERROR_NO_CARS_FOUND,
     ERROR_NO_SERVICES_FOUND,
 )
@@ -55,22 +57,77 @@ class AdminService:
             }
 
     @staticmethod
+    def get_user(user_id):
+        try:
+            user = User.query.get(user_id)
+            if user:
+                return user.to_dict()
+        except Exception as e:
+            logger.error(f"Error in get_user: {str(e)}")
+            return None
+
+    @staticmethod
     def add_user(username, email, password, role="user"):
         try:
             result = validate_username_and_email(username, email)
             if result:
                 return result
-            else:
-                password = hash_password(password)
-                new_user = User(username=username, email=email, password=password, role=role)
-                db.session.add(new_user)
-                db.session.commit()
-                logger.info(ADD_SUCCESS)
-                return {"message": ADD_SUCCESS}
+
+            password = hash_password(password)
+            new_user = User(
+                username=username, email=email, password=password, role=role
+            )
+            db.session.add(new_user)
+            db.session.commit()
+            logger.info(ADD_SUCCESS)
+            return {"message": ADD_SUCCESS}
         except Exception as e:
             db.session.rollback()
             logger.error(f"Error in add_user: {str(e)}")
-            return {"message": "Failed to add user."}
+            return {"message": "Error in add_user."}
+
+    @staticmethod
+    def update_user(user_id, username=None, email=None, password=None, role=None):
+        try:
+            user = User.query.get(user_id)
+            if not user:
+                logger.warning(ERROR_USER_NOT_FOUND)
+                return {"message": ERROR_USER_NOT_FOUND}
+
+            if username or email:
+                result = validate_username_and_email(username, email)
+                if result:
+                    return result
+
+            updated = False
+
+            if username and username != user.username:
+                user.username = username
+                updated = True
+
+            if email and email != user.email:
+                user.email = email
+                updated = True
+
+            if password:
+                user.password = hash_password(password)
+                updated = True
+
+            if role and role in ["admin", "user"] and role != user.role:
+                user.role = role
+                updated = True
+
+            if updated:
+                db.session.commit()
+                logger.info(UPDATE_SUCCESS)
+                return {"message": UPDATE_SUCCESS}
+            else:
+                return {"message": "No changes made."}
+
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in update_user: {str(e)}")
+            return {"message": "Error in update_user."}
 
     @staticmethod
     def get_cars_with_user_name(page=1, per_page=10):
@@ -252,7 +309,7 @@ class AdminService:
                     "current_page": services.page,
                 },
             }
-        
+
         except Exception as e:
             logger.error(f"Error in search: {str(e)}")
             return {"users": [], "cars": [], "services": []}

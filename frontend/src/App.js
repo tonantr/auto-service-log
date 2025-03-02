@@ -6,6 +6,7 @@ import Login from "./components/auth/Login";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UserList from "./components/dashboard/admin/UserList";
 import AddUser from "./components/dashboard/admin/AddUser";
+import UpdateUser from "./components/dashboard/admin/UpdateUser";
 import CarList from "./components/dashboard/admin/CarList";
 import ServiceList from "./components/dashboard/admin/ServiceList";
 import DashboardHome from "./components/dashboard/admin/DashboardHome";
@@ -52,6 +53,7 @@ function App() {
           <Route path="services" element={<ServiceList />} />
           <Route path="search-results" element={<SearchResults />} />
           <Route path="add-user" element={<AddUser />} />
+          <Route path="update-user/:user_id" element={<UpdateUser />} />
         </Route>
 
         <Route

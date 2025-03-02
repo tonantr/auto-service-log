@@ -36,7 +36,7 @@ function DashboardHome() {
                     navigate("/login");
                 } else {
                     console.error("Error fetching totals:", error);
-                    setError("Error fetching totals: " + err.message);
+                    setError("Error fetching totals");
                 }
             });
     }, [navigate]);

@@ -20,8 +20,8 @@ function UserList() {
         navigate("/admin/add-user")
     };
 
-    const handleUpdateUser = (userId) => {
-        window.confirm("Are you sure?")
+    const handleUpdateUser = (user_id) => {
+        navigate(`/admin/update-user/${user_id}`);
     };
 
     const handleDeleteUser = (userId) => {
@@ -83,7 +83,7 @@ function UserList() {
                             <td>{user.role}</td>
                             <td>{user.email}</td>
                             <td>
-                                <button onClick={handleUpdateUser}>Update</button>
+                                <button onClick={() => handleUpdateUser(user.user_id)}>Update</button>
                                 <button onClick={handleDeleteUser}>Delete</button>
                             </td>
                         </tr>

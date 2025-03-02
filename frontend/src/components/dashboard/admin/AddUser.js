@@ -44,8 +44,11 @@ function AddUser() {
             if (err.response?.status === 401) {
                 localStorage.removeItem("access_token"); 
                 navigate("/login"); 
+            } else if (err.response?.data?.message) {
+                setError(err.response.data.message);
             } else {
-                setError("Failed to add user.");
+                console.error('Error:', err);
+                setError("Failed to add a user.");
             }
         }
     };
