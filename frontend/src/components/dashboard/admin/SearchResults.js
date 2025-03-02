@@ -43,8 +43,13 @@ function SearchResults() {
                 });
                 setTotalPagesCount(response.data.total_pages || 0);
             } catch (error) {
-                setError("An error occurred while fetching results.");
-                console.error("Search error:", error);
+                if (error.response?.status === 401) {
+                    localStorage.removeItem("access_token");
+                    navigate("/login");
+                } else {
+                    console.error("Search error:", error);
+                    setError("An error occurred while fetching search results.");
+                }
             }
         };
 

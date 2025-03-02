@@ -30,8 +30,14 @@ function DashboardHome() {
             .then((response) => {
                 setDashboardData(response.data);
             })
-            .catch((err) => {
-                setError("Error fetching users: " + err.message);
+            .catch((error) => {
+                if (error.response?.status === 401) {
+                    localStorage.removeItem("access_token");
+                    navigate("/login");
+                } else {
+                    console.error("Error fetching totals:", error);
+                    setError("Error fetching totals: " + err.message);
+                }
             });
     }, [navigate]);
 

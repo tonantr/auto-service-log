@@ -41,8 +41,9 @@ function AddUser() {
                 navigate("/admin/users")
             }
         } catch (err) {
-            if (err.response) {
-                setError(err.response.data.message);
+            if (err.response?.status === 401) {
+                localStorage.removeItem("access_token"); 
+                navigate("/login"); 
             } else {
                 setError("Failed to add user.");
             }

@@ -45,7 +45,13 @@ function UserList() {
                 setUsers(response.data.users);
                 setTotalPagesCount(response.data.total_pages);
             } catch (error) {
-                setError('Failed to load users.');
+                if (error.response?.status === 401) {
+                    localStorage.removeItem("access_token");
+                    navigate("/login");
+                } else {
+                    console.error("Error fetching users:", error);
+                    setError(error.response?.data?.message || "Failed to load users.");
+                }
             }
         };
 

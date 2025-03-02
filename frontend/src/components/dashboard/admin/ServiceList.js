@@ -44,7 +44,13 @@ function ServiceList() {
                 setServices(response.data.services);
                 setTotalPagesCount(response.data.total_pages);
             } catch (error) {
-                setError('Failed to load services.');
+                if (error.response?.status === 401) {
+                    localStorage.removeItem("access_token");
+                    navigate("/login");
+                } else {
+                    console.error("Error fetching services:", error);
+                    setError(error.response?.data?.message || "Failed to load services.");
+                }
             }
         };
 

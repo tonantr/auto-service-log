@@ -44,7 +44,13 @@ function CarList() {
                 setCars(response.data.cars);
                 setTotalPagesCount(response.data.total_pages);
             } catch (error) {
-                setError('Failed to load cars.');
+                if (error.response?.status === 401) {
+                    localStorage.removeItem("access_token");
+                    navigate("/login"); 
+                } else {
+                    console.error("Error fetching cars:", error);
+                    setError(error.response?.data?.message || "Failed to load cars.");
+                }
             }
         };
 
