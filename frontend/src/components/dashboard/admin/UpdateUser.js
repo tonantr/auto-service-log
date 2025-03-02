@@ -155,7 +155,10 @@ function UpdateUser() {
                     </select>
                 </div>
 
-                <button style={{ marginTop: '10px' }} type="submit">Update</button>
+                <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+                    <button type="submit" className="button button-primary">Update</button>
+                    <button type="button" className="button button-secondary" onClick={() => navigate("/admin/users")}>Cancel</button>
+                </div>
             </form>
 
         </div>

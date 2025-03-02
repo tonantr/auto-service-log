@@ -32,10 +32,9 @@ function UserDashboard({ onLogout }) {
         }
     }, [searchQuery]);
 
-
     return (
-        <div className="user-dashboard">
-            <aside className="sidebar">
+        <div className="admin-dashboard">
+            <div className="sidebar">
                 <h3>Menu</h3>
                 <ul>
                     <li><Link to="/user" className="sidebar-link">Dashboard</Link></li>
@@ -48,10 +47,10 @@ function UserDashboard({ onLogout }) {
                         </button>
                     </li>
                 </ul>
-            </aside>
+            </div>
 
-            <main className="main-content">
-                <header className="header">
+            <div className="main-content">
+                <div className="header">
                     <h2>User Dashboard</h2>
                     <p><strong>Signed in as:</strong> {loggedInUser} ({role})</p>
                     <form onSubmit={handleSearchSubmit}>
@@ -62,17 +61,19 @@ function UserDashboard({ onLogout }) {
                             onChange={handleSearchChange}
                             className="search-bar"
                         />
-                        <button type="submit" className="search-button" disabled={!searchQuery.trim()}>
+                        <button type="submit" className="button button-primary" disabled={!searchQuery.trim()}>
                             Search
                         </button>
                     </form>
-                </header>
-                <section className="content">
+                </div>
+                <div className="content">
                     <Outlet />
-                </section>
-            </main>
+                </div>
+            </div>
+
         </div>
     );
+
 }
 
 export default UserDashboard;

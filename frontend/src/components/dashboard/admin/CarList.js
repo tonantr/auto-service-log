@@ -62,7 +62,7 @@ function CarList() {
             <h3>Car List</h3>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             
-            <button onClick={handleAddCar}>Add</button>
+            <button className="button button-primary" onClick={handleAddCar}>Add</button>
 
             <table style={{ marginTop: "10px" }}>
                 <thead>
@@ -86,8 +86,8 @@ function CarList() {
                             <td>{car.year}</td>
                             <td>{car.vin}</td>
                             <td>
-                                <button onClick={handleUpdateCar}>Update</button>
-                                <button onClick={handleDeleteCar}>Delete</button>
+                                <button className="button button-primary" onClick={handleUpdateCar}>Update</button>
+                                <button className="button button-primary" onClick={handleDeleteCar}>Delete</button>
                             </td>
                         </tr>
                     ))}

@@ -80,3 +80,21 @@
   margin-left: 20px;
   padding: 20px; 
 }
+
+.button {
+  width: 100px;       
+  padding: 5px;     
+  text-align: center; 
+  border-radius: 5px; 
+  border: none;       
+}
+
+.button-primary {
+  background-color: #333;
+  color: white;
+}
+
+.button-secondary {
+  background-color: #333;
+  color: white;
+}

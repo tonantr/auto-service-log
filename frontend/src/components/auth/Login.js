@@ -76,7 +76,7 @@ function Login( {setIsAuthenticated, setRole}) {
                         className="input-button"
                     />
                 </div>
-                <button type="submit" style={{ marginTop: '10px' }} className="input-button">Login</button>
+                <button type="submit" style={{ marginTop: '10px' }} className="button button-primary">Login</button>
             </form>
 
         </div>

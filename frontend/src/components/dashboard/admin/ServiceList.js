@@ -78,7 +78,7 @@ function ServiceList() {
             <h3>Service List</h3>
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
-            <button onClick={handleAddService}>Add</button>
+            <button className="button button-primary" onClick={handleAddService}>Add</button>
 
             <table style={{ marginTop: "10px" }}>
                 <thead>
@@ -108,8 +108,8 @@ function ServiceList() {
                                 {truncateText(service.notes)}
                             </td>
                             <td>
-                                <button onClick={handleUpdateService}>Update</button>
-                                <button onClick={handleDeleteService}>Delete</button>
+                                <button className="button button-primary" onClick={handleUpdateService}>Update</button>
+                                <button className="button button-primary" onClick={handleDeleteService}>Delete</button>
                             </td>
                         </tr>
                     ))}

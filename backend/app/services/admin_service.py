@@ -8,7 +8,6 @@ from app.database.database import db
 from app.utils.auth_utils import hash_password
 from app.utils.validation import validate_username_and_email
 from app.utils.constants import (
-    RETRIEVAL_SUCCESS,
     ADD_SUCCESS,
     UPDATE_SUCCESS,
     ERROR_NO_USERS_FOUND,
@@ -26,7 +25,6 @@ class AdminService:
                 page=page, per_page=per_page, error_out=False
             )
             if pagination.items:
-                logger.info(RETRIEVAL_SUCCESS)
                 users = [user.to_dict() for user in pagination.items]
 
                 results = {
@@ -79,7 +77,6 @@ class AdminService:
             )
             db.session.add(new_user)
             db.session.commit()
-            logger.info(ADD_SUCCESS)
             return {"message": ADD_SUCCESS}
         except Exception as e:
             db.session.rollback()
@@ -119,7 +116,6 @@ class AdminService:
 
             if updated:
                 db.session.commit()
-                logger.info(UPDATE_SUCCESS)
                 return {"message": UPDATE_SUCCESS}
             else:
                 return {"message": "No changes made."}
@@ -138,7 +134,6 @@ class AdminService:
                 .paginate(page=page, per_page=per_page, error_out=False)
             )
             if pagination.items:
-                logger.info(RETRIEVAL_SUCCESS)
                 car_list = []
                 for car, owner in pagination.items:
                     car_list.append(
@@ -183,7 +178,6 @@ class AdminService:
             )
 
             if pagination.items:
-                logger.info(RETRIEVAL_SUCCESS)
                 service_list = []
                 for service, car_name in pagination.items:
                     service_list.append(

@@ -62,7 +62,7 @@ function UserList() {
     return (
         <div>
             <h3>User List</h3>
-            <button onClick={handleAddUser}>Add</button>
+            <button className="button button-primary"  onClick={handleAddUser}>Add</button>
             {error && <p>{error}</p>}
 
             <table style={{ marginTop: "10px" }}>
@@ -83,8 +83,8 @@ function UserList() {
                             <td>{user.role}</td>
                             <td>{user.email}</td>
                             <td>
-                                <button onClick={() => handleUpdateUser(user.user_id)}>Update</button>
-                                <button onClick={handleDeleteUser}>Delete</button>
+                                <button className="button button-primary"  onClick={() => handleUpdateUser(user.user_id)}>Update</button>
+                                <button className="button button-primary"  onClick={handleDeleteUser}>Delete</button>
                             </td>
                         </tr>
                     ))}

@@ -19,11 +19,11 @@ function usePagination(initialPage = 1, initialPerPage = 10) {
 
     const paginationControls = (
         <div style={{ marginTop: "20px" }}>
-            <button onClick={handlePreviousPage} disabled={page === 1}>
+            <button className="button button-primary"  onClick={handlePreviousPage} disabled={page === 1}>
                 Previous
             </button>
             <span> Page {page} of {totalPages} </span>
-            <button onClick={handleNextPage} disabled={page === totalPages}>
+            <button className="button button-primary"  onClick={handleNextPage} disabled={page === totalPages}>
                 Next
             </button>
         </div>

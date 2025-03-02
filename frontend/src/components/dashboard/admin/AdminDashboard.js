@@ -62,7 +62,7 @@ function AdminDashboard({ onLogout }) {
                             onChange={handleSearchChange}
                             className="search-bar"
                         />
-                        <button type="submit" className="search-button" disabled={!searchQuery.trim()}>
+                        <button type="submit" className="button button-primary" disabled={!searchQuery.trim()}>
                             Search
                         </button>
                     </form>
