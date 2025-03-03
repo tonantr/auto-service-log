@@ -49,8 +49,10 @@ function DeletePage() {
             {!isConfirmed ? (
                 <div>
                     <p>Are you sure you want to delete this {entity}?</p>
-                    <button className="button button-primary" onClick={() => setIsConfirmed(true)}>Delete</button>
-                    <button className="button button-secondary" onClick={() => navigate(`/admin/${entity}s`)}>Cancel</button>
+                    <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+                        <button className="button button-primary" onClick={() => setIsConfirmed(true)}>Delete</button>
+                        <button className="button button-secondary" onClick={() => navigate(`/admin/${entity}s`)}>Cancel</button>
+                    </div>
                 </div>
             ) : (
                 <p>Deleting...</p>

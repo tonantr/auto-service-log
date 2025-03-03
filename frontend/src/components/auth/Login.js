@@ -46,7 +46,7 @@ function Login( {setIsAuthenticated, setRole}) {
     };
 
     return (
-        <div className="login-container">
+        <div style={{ padding: '10px', marginLeft: '10px'}} className="login-container">
             <h3>Login</h3>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <form onSubmit={login}>
