@@ -24,37 +24,28 @@ function DeletePage() {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-
-            if (response.status === 400) {
-                setError(response.data.message);
-                return;
-            }
-            if (response.status === 404) {
-                setError("User not found.");
-                return;
-            }
-            if (response.status === 200) {
-                navigate(`/admin/${entity}s`); 
-            }
+            navigate(`/admin/${entity}s`); 
             
         } catch (err) {
-            console.error('Delete error:', err);
-            setError("Failed to delete.");
+            if (err.response) {
+                setError(err.response.data.message);
+            } else {
+                setError("Failed to delete.");
+            }
         } 
     };
 
     useEffect(() => {
-        if (!id) {
-            setError('Invalid ID.');
-            return;
+        if (!id || !entity) {
+            setError("Invalid request. Entity or ID is missing.");
         }
-    }, [id]);
+    }, [id, entity]);
 
     useEffect(() => {
         if (isConfirmed) {
             deleteEntity();
         }
-    }, [isConfirmed, entity, id]);
+    }, [isConfirmed]);
 
 
     return (
