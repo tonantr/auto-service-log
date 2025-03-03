@@ -1,12 +1,12 @@
-import logging
 from sqlalchemy.sql import or_
+from sqlalchemy.orm import load_only
 from app.models.user import User
 from app.models.car import Car
 from app.models.service import Service
 from app.utils.logging_config import logger
 from app.database.database import db
 from app.utils.auth_utils import hash_password
-from app.utils.validation import validate_username_and_email
+from app.utils.validation import validate_username_and_email, validate_vin
 from app.utils.constants import (
     ADD_SUCCESS,
     UPDATE_SUCCESS,
@@ -55,6 +55,15 @@ class AdminService:
                 "per_page": per_page,
             }
 
+    @staticmethod
+    def get_users_list():
+        try:
+            users = User.query.options(load_only(User.user_id, User.username)).all()
+            return [{"user_id": user.user_id, "username": user.username} for user in users]
+        except Exception as e:
+            logger.error(f"Error in get_users: {str(e)}")
+            return []
+        
     @staticmethod
     def get_user(user_id):
         try:
@@ -191,6 +200,24 @@ class AdminService:
                 "current_page": page,
                 "per_page": per_page,
             }
+
+    @staticmethod
+    def add_car(user_id, name, model, year, vin):
+        try:
+            result = validate_vin(vin)
+            if result:
+                return result
+            
+            new_car = Car (
+                user_id=user_id, name=name, model=model, year=year, vin=vin
+            )
+            db.session.add(new_car)
+            db.session.commit()
+            return {"message": ADD_SUCCESS}
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in add_car: {str(e)}")
+            return {"message": "Error in add_car."}
 
     @staticmethod
     def get_services_with_car_name(page=1, per_page=10):

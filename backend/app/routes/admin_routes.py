@@ -33,6 +33,21 @@ def get_users(current_user):
         logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
 
+@admin_bp.route("/users/list", methods=["GET"])
+@token_required
+def get_users_list(current_user):
+    try:
+        users = AdminService.get_users_list()
+
+        if users:
+            return jsonify(users), 200
+        else:
+            logger.warning(ERROR_NO_USERS_FOUND)
+            return jsonify(message=ERROR_NO_USERS_FOUND), 404
+    except Exception as e:
+        logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
+        return jsonify(message=ERROR_FETCHING_DATA), 500
+
 @admin_bp.route("/user/<int:user_id>", methods=["GET"])
 @token_required
 def get_user(current_user, user_id):
@@ -120,6 +135,27 @@ def get_cars(current_user):
         logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
 
+@admin_bp.route("/add_car", methods=["POST"])
+@token_required
+def add_car(current_user):
+    try:
+        data = request.get_json()
+
+        user_id = data.get('userID')
+        name = data.get('name')
+        model = data.get('model')
+        year = data.get('year') 
+        vin = data.get('vin')
+
+        response = AdminService.add_car(user_id, name, model, year, vin)
+        if "Error" in response["message"]:
+            return jsonify(response), 400
+
+        return jsonify(response), 200
+    except Exception as e:
+        logger.error(f"Error in add_car: {str(e)}")
+        return jsonify({"message": "An unexpected error occurred."}), 500
+    
 @admin_bp.route("/services", methods=["GET"])
 @token_required
 def get_services(current_user):

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { validatePassword, validateEmail } from "../../../validation"
 
 function AddUser() {
     const [username, setUsername] = useState("");
@@ -14,15 +15,22 @@ function AddUser() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (password.length < 6) {
-            setError("Password must be at least 6 characters long.");
-            return;
-        }
-
         const token = localStorage.getItem("access_token");
 
         if (!token) {
             navigate("/login")
+            return;
+        }
+
+        const passwordError = validatePassword(password);
+        if (passwordError) {
+            setError(passwordError);
+            return;
+        }
+        
+        const emailError = validateEmail(email);
+        if (emailError) {
+            setError(emailError);
             return;
         }
 

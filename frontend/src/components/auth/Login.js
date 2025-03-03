@@ -35,9 +35,7 @@ function Login( {setIsAuthenticated, setRole}) {
                     navigate('/');
                 }
 
-            } else {
-                setError('Invalid credentials');
-            }
+            } 
         }
         catch (err) {
             setError('Invalid credentials');
@@ -48,7 +46,6 @@ function Login( {setIsAuthenticated, setRole}) {
     return (
         <div style={{ padding: '10px', marginLeft: '10px'}} className="login-container">
             <h3>Login</h3>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
             <form onSubmit={login}>
                 <div style={{ marginBottom: '10px' }}>
                     <div>
@@ -78,6 +75,10 @@ function Login( {setIsAuthenticated, setRole}) {
                 </div>
                 <button type="submit" style={{ marginTop: '10px' }} className="button button-primary">Login</button>
             </form>
+
+            <p>Need an account? Please contact the administrator.</p>
+
+            {error && <p style={{ color: 'red' }}>{error}</p>}
 
         </div>
     );

@@ -1,8 +1,11 @@
+import re
 from app.models.user import User
+from app.models.car import Car
 from app.utils.logging_config import logger
 from app.utils.constants import (
     ERROR_USERNAME_EXISTS,
     ERROR_EMAIL_EXISTS,
+    ERROR_VIN_EXISTS,
 )
 
 
@@ -17,5 +20,14 @@ def validate_username_and_email(username, email):
     if existing_email:
         logger.warning(ERROR_EMAIL_EXISTS)
         return {"message": ERROR_EMAIL_EXISTS}
+    
+    return None
+
+def validate_vin(vin):
+    existing_vin = Car.query.filter_by(vin=vin).first()
+
+    if existing_vin:
+        logger.warning(ERROR_VIN_EXISTS)
+        return {"message": ERROR_VIN_EXISTS}
     
     return None
