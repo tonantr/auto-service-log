@@ -37,9 +37,14 @@ function DeletePage() {
             setError('Invalid ID.');
             return;
         }
+    }, [id]);
 
-        deleteEntity();
-    }, [entity, id]);
+    useEffect(() => {
+        if (isConfirmed) {
+            deleteEntity();
+        }
+    }, [isConfirmed, entity, id]);
+
 
     return (
         <div>
