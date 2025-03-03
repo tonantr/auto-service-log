@@ -94,8 +94,6 @@ def update_user(current_user, user_id):
 @token_required
 def delete_user(current_user, user_id):
     try:   
-        response = AdminService.delete_user(current_user, user_id)
-        
         response, status_code = AdminService.delete_user(current_user, user_id) 
         return jsonify(response), status_code 
     
