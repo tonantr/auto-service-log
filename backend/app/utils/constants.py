@@ -1,5 +1,6 @@
 RETRIEVAL_SUCCESS = "Retrieved successfully."
 ADD_SUCCESS = "Added successfully."
+DELETE_SUCCESS = "Deleted successfully."
 UPDATE_SUCCESS = "Updated successfully."
 ERROR_USERNAME_EXISTS = "Error: Username exists."
 ERROR_EMAIL_EXISTS = "Error: Email exists."

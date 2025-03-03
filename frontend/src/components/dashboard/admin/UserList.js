@@ -24,8 +24,8 @@ function UserList() {
         navigate(`/admin/update-user/${user_id}`);
     };
 
-    const handleDeleteUser = (userId) => {
-        window.confirm("Are you sure?")
+    const handleDeleteUser = (user_id) => {
+        navigate(`/admin/delete/user/${user_id}`);
     }
 
     useEffect(() => {
@@ -84,7 +84,7 @@ function UserList() {
                             <td>{user.email}</td>
                             <td>
                                 <button className="button button-primary"  onClick={() => handleUpdateUser(user.user_id)}>Update</button>
-                                <button className="button button-primary"  onClick={handleDeleteUser}>Delete</button>
+                                <button className="button button-primary"  onClick={() => handleDeleteUser(user.user_id)}>Delete</button>
                             </td>
                         </tr>
                     ))}

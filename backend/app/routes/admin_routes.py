@@ -90,6 +90,19 @@ def update_user(current_user, user_id):
         logger.error(f"Error in update_user: {str(e)}")
         return jsonify({"message": "An unexpected error occurred."}), 500
 
+@admin_bp.route("/delete_user/<int:user_id>", methods=["DELETE"])
+@token_required
+def delete_user(current_user, user_id):
+    try:
+        response = AdminService.delete_user(user_id)
+        if "Error" in response["message"]:
+            return jsonify(response), 400
+        
+        return jsonify(response), 200
+    except Exception as e:
+        logger.error(f"Error in delete_user: {str(e)}")
+        return jsonify({"message": "An unexpected error occurred."}), 500
+
 @admin_bp.route("/cars", methods=["GET"])
 @token_required
 def get_cars(current_user):

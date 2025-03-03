@@ -10,6 +10,7 @@ from app.utils.validation import validate_username_and_email
 from app.utils.constants import (
     ADD_SUCCESS,
     UPDATE_SUCCESS,
+    DELETE_SUCCESS,
     ERROR_NO_USERS_FOUND,
     ERROR_USER_NOT_FOUND,
     ERROR_NO_CARS_FOUND,
@@ -124,6 +125,23 @@ class AdminService:
             db.session.rollback()
             logger.error(f"Error in update_user: {str(e)}")
             return {"message": "Error in update_user."}
+
+    @staticmethod
+    def delete_user(user_id):
+        try:
+            user = User.query.get(user_id)
+            if not user:
+                logger.warning(ERROR_USER_NOT_FOUND)
+                return {"message": ERROR_USER_NOT_FOUND}
+            
+            db.session.delete(user)
+            db.session.commit()
+
+            return {"message": DELETE_SUCCESS}
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in delete_user: {str(e)}")
+            return {"message": "Error in delete_user."}
 
     @staticmethod
     def get_cars_with_user_name(page=1, per_page=10):

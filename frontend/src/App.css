@@ -90,11 +90,11 @@
 }
 
 .button-primary {
-  background-color: #333;
+  background-color: gray;
   color: white;
 }
 
 .button-secondary {
-  background-color: #333;
+  background-color: black;
   color: white;
 }
