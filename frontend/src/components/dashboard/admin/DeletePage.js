@@ -24,7 +24,18 @@ function DeletePage() {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-            navigate(`/admin/${entity}s`); 
+
+            if (response.status === 400) {
+                setError(response.data.message);
+                return;
+            }
+            if (response.status === 404) {
+                setError("User not found.");
+                return;
+            }
+            if (response.status === 200) {
+                navigate(`/admin/${entity}s`); 
+            }
             
         } catch (err) {
             console.error('Delete error:', err);
@@ -50,7 +61,7 @@ function DeletePage() {
         <div>
             <h3>Deleting {entity}...</h3>
             {error && <p style={{ color: "red" }}>{error}</p>}
-
+    
             {!isConfirmed ? (
                 <div>
                     <p>Are you sure you want to delete this {entity}?</p>
@@ -60,7 +71,9 @@ function DeletePage() {
                     </div>
                 </div>
             ) : (
-                <p>Deleting...</p>
+                <div>
+                    
+                </div>
             )}
         </div>
     );

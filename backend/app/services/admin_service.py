@@ -127,17 +127,23 @@ class AdminService:
             return {"message": "Error in update_user."}
 
     @staticmethod
-    def delete_user(user_id):
+    def delete_user(current_user, user_id):
+        if current_user.role == 'admin':
+            if current_user.user_id == user_id:
+                return {"message": "Admin cannot delete themselves."}, 400
         try:
             user = User.query.get(user_id)
             if not user:
                 logger.warning(ERROR_USER_NOT_FOUND)
-                return {"message": ERROR_USER_NOT_FOUND}
+                return {"message": ERROR_USER_NOT_FOUND}, 404
+            
+            if user.role == 'admin':
+                return {"message": "Admin cannot delete other admins."}, 400
             
             db.session.delete(user)
             db.session.commit()
 
-            return {"message": DELETE_SUCCESS}
+            return {"message": DELETE_SUCCESS}, 200
         except Exception as e:
             db.session.rollback()
             logger.error(f"Error in delete_user: {str(e)}")

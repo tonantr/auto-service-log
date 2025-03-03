@@ -1,5 +1,4 @@
 from flask import request, jsonify
-import logging
 import jwt
 import os
 import datetime
@@ -25,7 +24,13 @@ def token_required(f):
 
         try:
             decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-            current_user = decoded_token["username"]
+            username = decoded_token["username"]
+
+            current_user = User.query.filter_by(username=username).first()
+
+            if not current_user:
+                return jsonify({"message": "User not found!"}), 404
+            
         except jwt.ExpiredSignatureError:
             return jsonify({"message": "Token has expired!"}), 401
         except jwt.InvalidTokenError:

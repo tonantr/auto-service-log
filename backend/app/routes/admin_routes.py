@@ -93,12 +93,12 @@ def update_user(current_user, user_id):
 @admin_bp.route("/delete_user/<int:user_id>", methods=["DELETE"])
 @token_required
 def delete_user(current_user, user_id):
-    try:
-        response = AdminService.delete_user(user_id)
-        if "Error" in response["message"]:
-            return jsonify(response), 400
+    try:   
+        response = AdminService.delete_user(current_user, user_id)
         
-        return jsonify(response), 200
+        response, status_code = AdminService.delete_user(current_user, user_id) 
+        return jsonify(response), status_code 
+    
     except Exception as e:
         logger.error(f"Error in delete_user: {str(e)}")
         return jsonify({"message": "An unexpected error occurred."}), 500
