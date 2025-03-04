@@ -194,6 +194,17 @@ def update_car(current_user, car_id):
         logger.error(f"Error in update_car: {str(e)}")
         return jsonify({"message": "An unexpected error occurred."}), 500
 
+@admin_bp.route("/delete_car/<int:car_id>", methods=["DELETE"])
+@token_required
+def delete_car(current_user, car_id):
+    try:   
+        response, status_code = AdminService.delete_car(car_id) 
+        return jsonify(response), status_code 
+    
+    except Exception as e:
+        logger.error(f"Error in delete_car: {str(e)}", exc_info=True) 
+        return jsonify({"message": "An unexpected error occurred."}), 500
+
 @admin_bp.route("/services", methods=["GET"])
 @token_required
 def get_services(current_user):

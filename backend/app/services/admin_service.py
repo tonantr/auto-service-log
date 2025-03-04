@@ -157,7 +157,7 @@ class AdminService:
         except Exception as e:
             db.session.rollback()
             logger.error(f"Error in delete_user: {str(e)}")
-            return {"message": "Error in delete_user."}
+            return {"message": "An unexpected error occurred."}, 500
 
     @staticmethod
     def get_cars_with_user_name(page=1, per_page=10):
@@ -267,8 +267,25 @@ class AdminService:
             
         except Exception as e:
             db.session.rollback()
-            logger.error(f"Error in update_car")
+            logger.error("Error in update_car")
             return {"message": "Error in update_car"}
+
+    @staticmethod
+    def delete_car(car_id):
+        try:
+            car = Car.query.get(car_id)
+            if not car:
+                logger.warning(ERROR_CAR_NOT_FOUND)
+                return {"message": ERROR_CAR_NOT_FOUND}, 404
+            
+            db.session.delete(car)
+            db.session.commit()
+            
+            return {"message": DELETE_SUCCESS}, 200
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in delete_car: {str(e)}")
+            return {"message": "An unexpected error occurred."}, 500
 
     @staticmethod
     def get_services_with_car_name(page=1, per_page=10):

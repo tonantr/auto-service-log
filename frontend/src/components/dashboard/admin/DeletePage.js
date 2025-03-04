@@ -24,6 +24,8 @@ function DeletePage() {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
+            console.log(response.data)
+
             navigate(`/admin/${entity}s`); 
             
         } catch (err) {

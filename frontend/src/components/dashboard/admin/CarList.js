@@ -24,9 +24,9 @@ function CarList() {
         navigate(`/admin/update-car/${car_id}`);
     };
 
-    const handleDeleteCar = (carId) => {
-        window.confirm("Are you sure?")
-    }
+    const handleDeleteCar = (car_id) => {
+        navigate(`/admin/delete/car/${car_id}`);
+    };
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
@@ -87,7 +87,7 @@ function CarList() {
                             <td>{car.vin}</td>
                             <td>
                                 <button className="button button-primary" onClick={() => handleUpdateCar(car.car_id)}>Update</button>
-                                <button className="button button-primary" onClick={handleDeleteCar}>Delete</button>
+                                <button className="button button-primary" onClick={() => handleDeleteCar(car.car_id)}>Delete</button>
                             </td>
                         </tr>
                     ))}
