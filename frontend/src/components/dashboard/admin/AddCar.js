@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { validateVIN, validateYear } from "../../../validation"
+import Select from "react-select";
 
 function AddCar() {
     const [userID, setUserID] = useState("");
@@ -30,6 +31,11 @@ function AddCar() {
             setUsers([]);
         }
     };
+
+    const options = users.map(user => ({
+        value: user.user_id,
+        label: user.username
+    }));
 
     useEffect(() => {
         fetchUsers()
@@ -92,17 +98,28 @@ function AddCar() {
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: '10px' }}>
-                    <div>
-                        <label>Select Owner</label>
+                    <div style={{marginBottom: "10px"}}>
+                        <label>Owner</label>
                     </div>
-                    <select value={userID} onChange={(e) => setUserID(e.target.value)} required>
+                    {/* <select value={userID} onChange={(e) => setUserID(e.target.value)} required>
                         <option value="">-------- Select --------</option>
                         {users.map((user) => (
                             <option key={user.user_id} value={user.user_id}>
                                 {user.username}
                             </option>
                         ))}
-                    </select>
+                    </select> */}
+
+                    <div style={{ width: "150px"}}>
+                        <Select
+                            options={options}
+                            value={options.find(option => option.value === userID)}
+                            onChange={selectedOption => setUserID(selectedOption.value)}
+                        />
+                    </div>
+
+                    
+
                 </div>
 
                 <div style={{ marginBottom: '10px' }}>
