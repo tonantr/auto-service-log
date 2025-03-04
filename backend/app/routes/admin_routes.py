@@ -1,4 +1,4 @@
-import logging
+from datetime import datetime
 from flask import Blueprint, jsonify, request
 from app.services.admin_service import AdminService
 from app.utils.auth_utils import token_required
@@ -136,6 +136,21 @@ def get_cars(current_user):
         logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
 
+@admin_bp.route("/cars/list", methods=["GET"])
+@token_required
+def get_cars_list(current_user):
+    try:
+        cars = AdminService.get_cars_list()
+
+        if cars:
+            return jsonify(cars), 200
+        else:
+            logger.warning(ERROR_NO_CARS_FOUND)
+            return jsonify(message=ERROR_NO_CARS_FOUND), 404
+    except Exception as e:
+        logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
+        return jsonify(message=ERROR_FETCHING_DATA), 500
+
 @admin_bp.route("/car/<int:car_id>", methods=["GET"])
 @token_required
 def get_car(current_user, car_id):
@@ -223,6 +238,42 @@ def get_services(current_user):
     except Exception as e:
         logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
+
+@admin_bp.route("/add_service", methods=["POST"])
+@token_required
+def add_service(current_user):
+    try:
+        data = request.get_json()
+        car_id = data.get("carID")  
+        mileage = data.get("mileage")
+        service_type = data.get("type") 
+        service_date = data.get("date")  
+        next_service_date = data.get("nextDate") 
+        cost = data.get("cost")
+        notes = data.get("notes")
+
+        service_date = datetime.strptime(service_date, "%Y-%m-%d").date()
+
+        if not next_service_date:
+            next_service_date = None
+        else:
+            next_service_date = datetime.strptime(next_service_date, "%Y-%m-%d").date()
+
+        mileage = int(mileage) if mileage else 0
+
+        cost = float(cost) if cost else 0.0
+
+        notes = notes if notes else None
+        
+        response = AdminService.add_service(car_id, mileage, service_type, service_date, next_service_date, cost, notes)
+        if "Error" in response["message"]:
+            return jsonify(response), 400
+
+        return jsonify(response), 200
+
+    except Exception as e:
+        logger.error(f"Error in add_service: {str(e)}")
+        return jsonify({"message": "An unexpected error occurred."}), 500
 
 @admin_bp.route('/dashboard_home', methods=['GET'])
 @token_required

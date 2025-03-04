@@ -34,7 +34,7 @@ function AddCar() {
 
     const options = users.map(user => ({
         value: user.user_id,
-        label: user.username
+        label: `${user.user_id} - ${user.username}`
     }));
 
     useEffect(() => {
@@ -99,7 +99,7 @@ function AddCar() {
             <form onSubmit={handleSubmit}>
             <div style={{ marginBottom: '10px' }}>
                     <div style={{marginBottom: "10px"}}>
-                        <label>Owner</label>
+                        <label>Select Owner</label>
                     </div>
                     {/* <select value={userID} onChange={(e) => setUserID(e.target.value)} required>
                         <option value="">-------- Select --------</option>
@@ -110,7 +110,7 @@ function AddCar() {
                         ))}
                     </select> */}
 
-                    <div style={{ width: "150px"}}>
+                    <div style={{ width: "200px"}}>
                         <Select
                             options={options}
                             value={options.find(option => option.value === userID)}

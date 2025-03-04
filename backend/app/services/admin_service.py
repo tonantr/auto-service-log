@@ -203,6 +203,15 @@ class AdminService:
             }
 
     @staticmethod
+    def get_cars_list():
+        try:
+            cars = Car.query.options(load_only(Car.car_id, Car.name)).all()
+            return [{"car_id": car.car_id, "name": car.name} for car in cars]
+        except Exception as e:
+            logger.error(f"Error in get_cars: {str(e)}")
+            return []
+
+    @staticmethod
     def get_car(car_id):
         try:
             car = Car.query.get(car_id)
@@ -339,6 +348,20 @@ class AdminService:
                 "current_page": page,
                 "per_page": per_page,
             }
+
+    @staticmethod
+    def add_service(car_id, mileage, service_type, service_date, next_service_date, cost, notes):
+        try:
+            new_service = Service (
+                car_id=car_id, mileage=mileage, service_type=service_type, service_date=service_date, next_service_date=next_service_date, cost=cost, notes=notes
+            )
+            db.session.add(new_service)
+            db.session.commit()
+            return {"message": ADD_SUCCESS}
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in add_service: {str(e)}")
+            return {"message": "An unexpected error occurred."}
 
     @staticmethod
     def get_total_users():

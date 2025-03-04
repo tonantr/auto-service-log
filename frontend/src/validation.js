@@ -34,3 +34,10 @@ export const validateYear = (year) => {
 
     return null;
 };
+
+export const validateMileageCost = (mileage, cost) => {
+    if (mileage < 0 || cost < 0 ) {
+        return "Mileage and cost must be positive values.";
+    }
+    return null;
+};

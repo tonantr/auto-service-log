@@ -17,7 +17,7 @@ function ServiceList() {
     } = usePagination();
 
     const handleAddService = () => {
-        window.confirm("Are you sure?")
+        navigate("/admin/add-service");
     };
 
     const handleUpdateService = (serviceId) => {
