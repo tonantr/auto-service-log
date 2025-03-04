@@ -17,11 +17,11 @@ function CarList() {
     } = usePagination();
 
     const handleAddCar = () => {
-        navigate("/admin/add-car")
+        navigate("/admin/add-car");
     };
 
-    const handleUpdateCar = (carId) => {
-        window.confirm("Are you sure?")
+    const handleUpdateCar = (car_id) => {
+        navigate(`/admin/update-car/${car_id}`);
     };
 
     const handleDeleteCar = (carId) => {
@@ -86,7 +86,7 @@ function CarList() {
                             <td>{car.year}</td>
                             <td>{car.vin}</td>
                             <td>
-                                <button className="button button-primary" onClick={handleUpdateCar}>Update</button>
+                                <button className="button button-primary" onClick={() => handleUpdateCar(car.car_id)}>Update</button>
                                 <button className="button button-primary" onClick={handleDeleteCar}>Delete</button>
                             </td>
                         </tr>

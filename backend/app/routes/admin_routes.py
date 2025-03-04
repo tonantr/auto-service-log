@@ -8,6 +8,7 @@ from app.utils.constants import (
     ERROR_NO_USERS_FOUND,
     ERROR_USER_NOT_FOUND,
     ERROR_NO_CARS_FOUND,
+    ERROR_CAR_NOT_FOUND,
     ERROR_NO_SERVICES_FOUND
 )
 
@@ -135,6 +136,21 @@ def get_cars(current_user):
         logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
 
+@admin_bp.route("/car/<int:car_id>", methods=["GET"])
+@token_required
+def get_car(current_user, car_id):
+    try:
+        car = AdminService.get_car(car_id)
+
+        if car:
+            return jsonify(car), 200
+        else:
+            logger.warning(ERROR_CAR_NOT_FOUND)
+            return jsonify(message=ERROR_CAR_NOT_FOUND), 404
+    except Exception as e:
+        logger.error(f"Error in get_car: {str(e)}")
+        return jsonify({"message": "An unexpected error occurred."}), 500
+
 @admin_bp.route("/add_car", methods=["POST"])
 @token_required
 def add_car(current_user):
@@ -155,7 +171,29 @@ def add_car(current_user):
     except Exception as e:
         logger.error(f"Error in add_car: {str(e)}")
         return jsonify({"message": "An unexpected error occurred."}), 500
-    
+
+@admin_bp.route("/update_car/<int:car_id>", methods=["PUT"])
+@token_required
+def update_car(current_user, car_id):
+    try:
+        data = request.get_json()
+
+        name = data.get("name")
+        model = data.get("model")
+        year = data.get("year")
+        vin = data.get("vin")
+
+        response = AdminService.update_car(car_id, name, model, year, vin)
+
+        if "Error" in response["message"]:
+            return jsonify(response), 400
+        
+        return jsonify(response), 200
+
+    except Exception as e:
+        logger.error(f"Error in update_car: {str(e)}")
+        return jsonify({"message": "An unexpected error occurred."}), 500
+
 @admin_bp.route("/services", methods=["GET"])
 @token_required
 def get_services(current_user):

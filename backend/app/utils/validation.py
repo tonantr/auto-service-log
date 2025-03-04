@@ -1,4 +1,3 @@
-import re
 from app.models.user import User
 from app.models.car import Car
 from app.utils.logging_config import logger

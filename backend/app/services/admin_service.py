@@ -11,6 +11,7 @@ from app.utils.constants import (
     ADD_SUCCESS,
     UPDATE_SUCCESS,
     DELETE_SUCCESS,
+    ERROR_CAR_NOT_FOUND,
     ERROR_NO_USERS_FOUND,
     ERROR_USER_NOT_FOUND,
     ERROR_NO_CARS_FOUND,
@@ -202,6 +203,16 @@ class AdminService:
             }
 
     @staticmethod
+    def get_car(car_id):
+        try:
+            car = Car.query.get(car_id)
+            if car:
+                return car.to_dict()
+        except Exception as e:
+            logger.error(f"Error in get_car: {str(e)}")
+            return None
+
+    @staticmethod
     def add_car(user_id, name, model, year, vin):
         try:
             result = validate_vin(vin)
@@ -218,6 +229,46 @@ class AdminService:
             db.session.rollback()
             logger.error(f"Error in add_car: {str(e)}")
             return {"message": "Error in add_car."}
+
+    @staticmethod
+    def update_car(car_id, name=None, model=None, year=None, vin=None):
+        try:
+            car = Car.query.get(car_id)
+            if not car:
+                logger.warning(ERROR_CAR_NOT_FOUND)
+                return {"message": ERROR_CAR_NOT_FOUND}
+            
+            updated = False
+            
+            if vin and car.vin != vin:
+                result = validate_vin(vin)
+                if result:
+                    return result
+                car.vin = vin
+                updated = True
+            
+            if name and car.name != name:
+                car.name = name
+                updated = True
+
+            if model and car.model != model:
+                car.model = model
+                updated = True
+
+            if year and car.year != year:
+                car.year = year
+                updated = True
+            
+            if updated:
+                db.session.commit()
+                return {"message": UPDATE_SUCCESS}
+            else:
+                return {"message": "No changes made."}
+            
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in update_car")
+            return {"message": "Error in update_car"}
 
     @staticmethod
     def get_services_with_car_name(page=1, per_page=10):
