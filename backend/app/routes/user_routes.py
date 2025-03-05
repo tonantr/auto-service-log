@@ -47,8 +47,6 @@ def load_cars(current_user):
 
     cars = UserService.get_cars_for_user(current_user, page=page, per_page=per_page)
 
-    print(cars)
-
     if not cars:
         return jsonify({"message": ERROR_NO_CARS_FOUND}), 404
     
