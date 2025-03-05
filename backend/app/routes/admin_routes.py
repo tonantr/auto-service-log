@@ -326,6 +326,17 @@ def update_service(current_user, service_id):
         logger.error(f"Error in update_service: {str(e)}")
         return jsonify({"message": "An unexpected error occurred."}), 500
 
+@admin_bp.route("/delete_service/<int:service_id>", methods=["DELETE"])
+@token_required
+def delete_service(current_user, service_id):
+    try:
+        response, status_code = AdminService.delete_service(service_id)
+        return jsonify(response), status_code
+    
+    except Exception as e:
+        logger.error(f"Error in delete_service: {str(e)}", exc_info=True) 
+        return jsonify({"message": "An unexpected error occurred."}), 500
+
 @admin_bp.route('/dashboard_home', methods=['GET'])
 @token_required
 def get_dashboard_data(current_user):

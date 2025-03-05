@@ -25,7 +25,7 @@ function ServiceList() {
     };
 
     const handleDeleteService = (service_id) => {
-        window.confirm("Are you sure?")
+        navigate(`/admin/delete/service/${service_id}`)
     }
 
     useEffect(() => {
@@ -109,7 +109,7 @@ function ServiceList() {
                             </td>
                             <td>
                                 <button className="button button-primary" onClick={() => handleUpdateService(service.service_id)}>Update</button>
-                                <button className="button button-primary" onClick={handleDeleteService}>Delete</button>
+                                <button className="button button-primary" onClick={() => handleDeleteService(service.service_id)}>Delete</button>
                             </td>
                         </tr>
                     ))}

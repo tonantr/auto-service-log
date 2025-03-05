@@ -420,6 +420,23 @@ class AdminService:
             return {"message": "An unexpected error occurred."}
 
     @staticmethod
+    def delete_service(service_id):
+        try:
+            service = Service.query.get(service_id)
+            if not service:
+                logger.warning(ERROR_SERVICE_NOT_FOUND)
+                return {"message": ERROR_SERVICE_NOT_FOUND}, 404
+            
+            db.session.delete(service)
+            db.session.commit()
+
+            return {"message": DELETE_SUCCESS}, 200
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in delete_service: {str(e)}")
+            return {"message": "An unexpected error occurred."}, 500
+
+    @staticmethod
     def get_total_users():
         try:
             return User.query.count()
