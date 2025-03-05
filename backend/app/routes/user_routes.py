@@ -37,3 +37,19 @@ def load_profile(current_user):
         return jsonify({"message": ERROR_USER_NOT_FOUND}), 404
 
     return jsonify(user_profile.to_dict()), 200
+
+
+@user_bp.route("/cars", methods=["GET"])
+@token_required
+def load_cars(current_user):
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=10, type=int)
+
+    cars = UserService.get_cars_for_user(current_user, page=page, per_page=per_page)
+
+    print(cars)
+
+    if not cars:
+        return jsonify({"message": ERROR_NO_CARS_FOUND}), 404
+    
+    return jsonify(cars), 200

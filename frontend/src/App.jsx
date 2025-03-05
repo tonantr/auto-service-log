@@ -17,6 +17,7 @@ import DeletePage from "./components/dashboard/admin/DeletePage";
 import DashboardHome from "./components/dashboard/admin/DashboardHome";
 import DashboardHomeUser from "./components/dashboard/user/DashboardHomeUser";
 import UserProfile from "./components/dashboard/user/UserProfile";
+import MyCars from "./components/dashboard/user/MyCars";
 import SearchResults from "./components/dashboard/admin/SearchResults";
 import './App.css';
 
@@ -78,6 +79,7 @@ function App() {
         >
           <Route index element={<DashboardHomeUser />} />
           <Route path="profile" element={<UserProfile />} />
+          <Route path="cars" element={<MyCars />} />
         </Route>
 
       </Routes>
