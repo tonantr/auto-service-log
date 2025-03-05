@@ -34,7 +34,7 @@ function AdminDashboard({ onLogout }) {
     }, [searchQuery]);
 
     return (
-        <div className="admin-dashboard">
+        <div className="dashboard">
             <div className="sidebar">
                 <h3>Menu</h3>
                 <ul>

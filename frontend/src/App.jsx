@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import './App.css';
+
+// --- Components ---
 import AdminDashboard from "./components/dashboard/admin/AdminDashboard";
 import UserDashboard from "./components/dashboard/user/UserDashboard";
 import Login from "./components/auth/Login";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+
+// --- Admin Components ---
 import UserList from "./components/dashboard/admin/UserList";
 import AddUser from "./components/dashboard/admin/AddUser";
 import UpdateUser from "./components/dashboard/admin/UpdateUser";
@@ -15,11 +20,12 @@ import AddService from "./components/dashboard/admin/AddService";
 import UpdateService from "./components/dashboard/admin/UpdateService";
 import DeletePage from "./components/dashboard/admin/DeletePage";
 import DashboardHome from "./components/dashboard/admin/DashboardHome";
+import SearchResults from "./components/dashboard/admin/SearchResults";
+
+// --- User Components ---
 import DashboardHomeUser from "./components/dashboard/user/DashboardHomeUser";
 import UserProfile from "./components/dashboard/user/UserProfile";
 import MyCars from "./components/dashboard/user/MyCars";
-import SearchResults from "./components/dashboard/admin/SearchResults";
-import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

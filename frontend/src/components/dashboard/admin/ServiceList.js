@@ -84,11 +84,11 @@ function ServiceList() {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Car Name</th>
+                        <th>Name</th>
                         <th>Mileage</th>
-                        <th>Service Type</th>
-                        <th>Service Date</th>
-                        <th>Next Service Date</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Next Date</th>
                         <th>Cost</th>
                         <th>Notes</th>
                         <th>Actions</th>

@@ -63,33 +63,40 @@
   color: #6c63ff; 
 }
 
-.admin-dashboard {
+html, body {
+  height: 100%;  
+  background-color: #f0f0f0;
+  margin: 0;
+}
+
+.dashboard {
   display: flex;
+  height: auto;
 }
 
 .sidebar {
   width: 250px;
-  padding: 20px;
-  background-color: #282c34;
-  height: 100vh;
-  color: white;
+  padding: 10px;
+  background-color: #f0f0f0; 
+  height: auto;
+  color: black;
 }
 
 .main-content {
   flex-grow: 1; 
-  margin-left: 20px;
-  padding: 20px; 
+  margin-left: 5px;
+  padding: 5px; 
 }
 
 .button {
-  width: 100px;       
+  width: 80px;       
   padding: 3px;     
   text-align: center; 
   border: none;       
 }
 
 .button-primary {
-  background-color: gray;
+  background-color: black;
   color: white;
 }
 
