@@ -21,6 +21,14 @@ from app.utils.constants import (
 
 class UserService:
     @staticmethod
+    def get_profile(current_user):
+        try:
+            return User.query.get(current_user.user_id)
+        except Exception as e:
+            logger.error(f"Error in get_profile: {str(e)}")
+            return None
+
+    @staticmethod
     def get_total_cars(current_user):
         try:
             return Car.query.filter_by(user_id = current_user.user_id).count()

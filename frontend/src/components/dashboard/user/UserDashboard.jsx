@@ -38,7 +38,7 @@ function UserDashboard({ onLogout }) {
                 <h3>Menu</h3>
                 <ul>
                     <li><Link to="/user" className="sidebar-link">Dashboard</Link></li>
-                    <li><Link to="#" className="sidebar-link">Profile</Link></li>
+                    <li><Link to="/user/profile" className="sidebar-link">Profile</Link></li>
                     <li><Link to="#" className="sidebar-link">My Cars</Link></li>
                     <li><Link to="#" className="sidebar-link">My Services</Link></li>
                     <li>

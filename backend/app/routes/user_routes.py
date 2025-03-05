@@ -26,3 +26,14 @@ def load_dashboard_data(current_user):
         jsonify({"total_cars": total_cars, "total_services": total_services}),
         200,
     )
+
+
+@user_bp.route("/profile", methods=["GET"])
+@token_required
+def load_profile(current_user):
+    user_profile = UserService.get_profile(current_user)
+
+    if user_profile is None:
+        return jsonify({"message": ERROR_USER_NOT_FOUND}), 404
+
+    return jsonify(user_profile.to_dict()), 200
