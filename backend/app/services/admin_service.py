@@ -15,6 +15,7 @@ from app.utils.constants import (
     ERROR_NO_USERS_FOUND,
     ERROR_USER_NOT_FOUND,
     ERROR_NO_CARS_FOUND,
+    ERROR_SERVICE_NOT_FOUND,
     ERROR_NO_SERVICES_FOUND,
 )
 
@@ -350,6 +351,16 @@ class AdminService:
             }
 
     @staticmethod
+    def get_service(service_id):
+        try:
+            service = Service.query.get(service_id)
+            if service:
+                return service.to_dict()
+        except Exception as e:
+            logger.error(f"Error in get_service: {str(e)}")
+            return None
+
+    @staticmethod
     def add_service(car_id, mileage, service_type, service_date, next_service_date, cost, notes):
         try:
             new_service = Service (
@@ -361,6 +372,51 @@ class AdminService:
         except Exception as e:
             db.session.rollback()
             logger.error(f"Error in add_service: {str(e)}")
+            return {"message": "An unexpected error occurred."}
+
+    @staticmethod
+    def update_service(service_id, mileage=None, service_type=None, service_date=None, next_service_date=None, cost=None, notes=None):
+        try:
+            service = Service.query.get(service_id)
+            if not service:
+                logger.warning(ERROR_SERVICE_NOT_FOUND)
+                return {"message": ERROR_SERVICE_NOT_FOUND}
+            
+            updated = False
+
+            if mileage and service.mileage != mileage:
+                service.mileage = mileage
+                updated = True
+
+            if service_type and service.service_type != service_type:
+                service.service_type = service_type
+                updated = True
+            
+            if service_date and service.service_date != service_date:
+                service.service_date = service_date
+                updated = True
+            
+            if next_service_date and service.next_service_date != next_service_date:
+                service.next_service_date = next_service_date
+                updated = True
+            
+            if cost and service.cost != cost:
+                service.cost = cost
+                updated = True
+            
+            if notes and service.notes != notes:
+                service.notes = notes
+                updated = True
+            
+            if updated:
+                db.session.commit()
+                return {"message": UPDATE_SUCCESS}
+            else:
+                return {"message": "No changes made."}
+
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in update_service: {str(e)}")
             return {"message": "An unexpected error occurred."}
 
     @staticmethod

@@ -20,11 +20,11 @@ function ServiceList() {
         navigate("/admin/add-service");
     };
 
-    const handleUpdateService = (serviceId) => {
-        window.confirm("Are you sure?")
+    const handleUpdateService = (service_id) => {
+        navigate(`/admin/update-service/${service_id}`)
     };
 
-    const handleDeleteService = (serviceId) => {
+    const handleDeleteService = (service_id) => {
         window.confirm("Are you sure?")
     }
 
@@ -108,7 +108,7 @@ function ServiceList() {
                                 {truncateText(service.notes)}
                             </td>
                             <td>
-                                <button className="button button-primary" onClick={handleUpdateService}>Update</button>
+                                <button className="button button-primary" onClick={() => handleUpdateService(service.service_id)}>Update</button>
                                 <button className="button button-primary" onClick={handleDeleteService}>Delete</button>
                             </td>
                         </tr>

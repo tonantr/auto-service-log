@@ -1,82 +1,79 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Select from "react-select";
 import { validateMileageCost } from "../../../validation";
-import { serviceTypes } from "../../../Constants";
+import { serviceTypes } from "../../../Constants"; 
 
-function AddService() {
-    const [carID, setCarID] = useState("");
-    const [cars, setCars] = useState([]);
-    const [mileage, setMileage] = useState("");
-    const [type, setType] = useState("");
-    const [date, setDate] = useState("");
-    const [nextDate, setNextDate] = useState("");
-    const [cost, setCost] = useState("");
-    const [notes, setNotes] = useState("");
+function UpdateService() {
+    const { service_id } = useParams();
+    const [data, setData] = useState({
+        mileage: '',
+        type: '',
+        date: '',
+        nextDate: '',
+        cost: '',
+        notes: '',
+    });
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
 
-    const fetchCars = async () => {
-        try {
-            const token = localStorage.getItem("access_token");
-            if (!token) {
-                navigate("/login");
-                return;
-            }
-            const response = await axios.get("/admin/cars/list", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setCars(response.data);
-        } catch (err) {
-            console.error("Failed to fetch cars:", err)
-            setCars([]);
-        }
-    };
-
-    const options = cars.map(car => ({
-        value: car.car_id,
-        label: `${car.car_id} - ${car.name}`
-    }));
-
     useEffect(() => {
-        fetchCars()
-    }, [navigate])
+
+        const fetchService = async () => {
+            try {
+                const token = localStorage.getItem('access_token');
+
+                if (!token) {
+                    navigate('/login');
+                    return;
+                }
+
+                const response = await axios.get(`/admin/service/${service_id}`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }
+                );
+
+                if (response.status === 200) {
+                    setData({
+                        mileage: response.data.mileage,
+                        type: response.data.service_type,
+                        date: response.data.service_date,
+                        nextDate: response.data.next_service_date,
+                        cost: response.data.cost,
+                        notes: response.data.notes,
+                    });
+                }
+            } catch (err) {
+                setError('Failed to fetch service data.');
+            }
+        };
+        fetchService()
+    }, [service_id]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const token = localStorage.getItem("access_token");
+        const token = localStorage.getItem('access_token');
 
         if (!token) {
             navigate("/login")
             return;
         }
 
-        const errorMessage = validateMileageCost(mileage, cost)
+        const errorMessage = validateMileageCost(data.mileage, data.cost)
         if (errorMessage) {
             setError(errorMessage);
             return;
         }
 
-        const data = { carID, mileage, type, date, nextDate, cost, notes };
-
         try {
-            const response = await axios.post("/admin/add_service", data, {
+            const response = await axios.put(`/admin/update_service/${service_id}`, data, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
             if (response.status === 200) {
-                setError("");
-                setCarID("");
-                setMileage("");
-                setType("");
-                setDate("");
-                setNextDate("");
-                setCost("");
-                setNotes("");
-                navigate("/admin/services")
+                navigate("/admin/services");
             }
         } catch (err) {
             if (err.response?.status === 401) {
@@ -86,30 +83,16 @@ function AddService() {
                 setError(err.response.data.message);
             } else {
                 console.error('Error:', err);
-                setError("Failed to add a service.");
+                setError("Failed to update a service.");
             }
         }
     };
 
     return (
         <div>
-            <h3>Add Service</h3>
+            <h3>Update Service</h3>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '10px' }}>
-                    <div style={{ marginBottom: "10px" }}>
-                        <label>Select Car</label>
-                    </div>
-
-                    <div style={{ width: "200px" }}>
-                        <Select
-                            options={options}
-                            value={options.find(option => option.value === carID)}
-                            onChange={selectedOption => setCarID(selectedOption.value)}
-                        />
-                    </div>
-
-                </div>
 
                 <div style={{ marginBottom: '10px' }}>
                     <div>
@@ -117,8 +100,8 @@ function AddService() {
                     </div>
                     <input
                         type="number"
-                        value={mileage}
-                        onChange={(e) => setMileage(e.target.value)}
+                        value={data.mileage}
+                        onChange={(e) => setData({ ...data, mileage: e.target.value })}
                         required
                     />
                 </div>
@@ -129,8 +112,8 @@ function AddService() {
                     </div>
                     <input
                         type="text"
-                        value={type}
-                        onChange={(e) => setType(e.target.value)}
+                        value={data.type}
+                        onChange={(e) => setData({ ...data, type: e.target.value })}
                         required
                     />
                 </div> */}
@@ -141,8 +124,8 @@ function AddService() {
                     </div>
                     <select
                         name="type"
-                        value={type}
-                        onChange={(e) => setType( e.target.value )}
+                        value={data.type}
+                        onChange={(e) => setData({ ...data, type: e.target.value })}
                         required
                     >
                         <option value="" disabled></option>
@@ -158,8 +141,8 @@ function AddService() {
                     </div>
                     <input
                         type="date"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
+                        value={data.date}
+                        onChange={(e) => setData({ ...data, date: e.target.value })}
                         placeholder="YYYY-MM-DD"
                         required
                     />
@@ -171,8 +154,8 @@ function AddService() {
                     </div>
                     <input
                         type="date"
-                        value={nextDate}
-                        onChange={(e) => setNextDate(e.target.value)}
+                        value={data.nextDate}
+                        onChange={(e) => setData({ ...data, nextDate: e.target.value })}
                         placeholder="YYYY-MM-DD"
                     />
                 </div>
@@ -183,8 +166,8 @@ function AddService() {
                     </div>
                     <input
                         type="number"
-                        value={cost}
-                        onChange={(e) => setCost(e.target.value)}
+                        value={data.cost}
+                        onChange={(e) => setData({ ...data, cost: e.target.value })}
                     />
                 </div>
 
@@ -193,22 +176,20 @@ function AddService() {
                         <label>Notes</label>
                     </div>
                     <textarea
-                        value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
+                        value={data.notes}
+                        onChange={(e) => setData({ ...data, notes: e.target.value })}
                         rows="6"
                         cols="30"
                     />
                 </div>
 
                 <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-                    <button type="submit" className="button button-primary">Add</button>
+                    <button type="submit" className="button button-primary">Update</button>
                     <button type="button" className="button button-secondary" onClick={() => navigate("/admin/services")}>Cancel</button>
                 </div>
-
             </form>
-
         </div>
     );
 }
 
-export default AddService;
+export default UpdateService
