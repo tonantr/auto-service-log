@@ -15,6 +15,7 @@ import AddService from "./components/dashboard/admin/AddService";
 import UpdateService from "./components/dashboard/admin/UpdateService";
 import DeletePage from "./components/dashboard/admin/DeletePage";
 import DashboardHome from "./components/dashboard/admin/DashboardHome";
+import DashboardHomeUser from "./components/dashboard/user/DashboardHomeUser";
 import SearchResults from "./components/dashboard/admin/SearchResults";
 import './App.css';
 
@@ -74,9 +75,7 @@ function App() {
             </ProtectedRoute>
           }
         >
-          {/* <Route index element={<UserProfile />} />
-          <Route path="cars" element={<UserCars />} />
-          <Route path="services" element={<UserServices />} /> */}
+          <Route index element={<DashboardHomeUser />} />
         </Route>
 
       </Routes>
