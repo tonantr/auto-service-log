@@ -27,6 +27,7 @@ import DashboardHomeUser from "./components/dashboard/user/DashboardHomeUser";
 import MyProfile from "./components/dashboard/user/MyProfile";
 import MyCars from "./components/dashboard/user/MyCars";
 import MyServices from "./components/dashboard/user/MyServices";
+import SearchPage from "./components/dashboard/user/SearchPage";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -88,6 +89,7 @@ function App() {
           <Route path="profile" element={<MyProfile />} />
           <Route path="cars" element={<MyCars />} />
           <Route path="services" element={<MyServices />} />
+          <Route path="search-page" element={<SearchPage />} />
         </Route>
 
       </Routes>

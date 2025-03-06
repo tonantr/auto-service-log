@@ -77,3 +77,23 @@ def load_services(current_user):
         return jsonify({"message": ERROR_NO_SERVICES_FOUND}), 404
     
     return jsonify(services), 200
+
+
+@user_bp.route("/search", methods=['GET'])
+@token_required
+def search(current_user):
+    try:
+        page = request.args.get('page', default=1, type=int)
+        per_page = request.args.get('per_page', default=10, type=int)
+        query = request.args.get('query', '')
+
+        if not query:
+            return jsonify({'cars': [], 'services': []})
+        
+        result = UserService.search(current_user, query, page=page, per_page=per_page)
+
+        return jsonify(result), 200
+
+    except Exception as e:
+        logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
+        return jsonify(message=ERROR_FETCHING_DATA), 500

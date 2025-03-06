@@ -28,6 +28,7 @@ function UserDashboard({ onLogout }) {
     const handleSearchSubmit = useCallback((e) => {
         e.preventDefault();
         if (searchQuery.trim()) {
+            navigate(`/user/search-page?query=${encodeURIComponent(searchQuery)}`);
             setSearchQuery("");
         }
     }, [searchQuery]);

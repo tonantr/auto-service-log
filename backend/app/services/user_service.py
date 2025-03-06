@@ -1,3 +1,4 @@
+from sqlalchemy import cast, String
 from sqlalchemy.sql import or_
 from sqlalchemy.orm import load_only
 from app.models.user import User
@@ -153,3 +154,47 @@ class UserService:
         except Exception as e:
             logger.error(f"Error in get_total_services: {str(e)}")
             return 0
+
+    @staticmethod
+    def search(current_user, query, page=1, per_page=10):
+        if not query:
+            return {"cars": [], "services": []}
+        try:
+            cars = Car.query.filter(
+                Car.user_id == current_user.user_id,
+                or_(
+                    Car.name.contains(query),
+                    Car.model.contains(query),
+                    Car.year.contains(query),
+                    Car.vin.contains(query),
+                )
+            ).paginate(page=page, per_page=per_page, error_out=False)
+
+            services = Service.query.filter(
+                Service.car.has(Car.user_id == current_user.user_id), 
+                or_(
+                    Service.mileage.contains(query),
+                    Service.service_type.contains(query),
+                    cast(Service.service_date, String).contains(query), 
+                    Service.cost.contains(query),
+                )
+            ).paginate(page=page, per_page=per_page, error_out=False)
+
+            return {
+                "cars": {
+                    "data": [car.to_dict() for car in cars.items],
+                    "total": cars.total,
+                    "total_pages": cars.pages,
+                    "current_page": cars.page,
+                },
+                "services": {
+                    "data": [service.to_dict() for service in services.items],
+                    "total": services.total,
+                    "total_pages": services.pages,
+                    "current_page": services.page,
+                },
+            }
+
+        except Exception as e:
+            logger.error(f"Error in search: {str(e)}")
+            return {"cars": [], "services": []}
