@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function UserProfile() {
+function MyProfile() {
     const [user, setUser] = useState(null);
     const [error, setError] = useState('');
 
@@ -60,4 +60,4 @@ function UserProfile() {
     );
 }
 
-export default UserProfile;
+export default MyProfile;
