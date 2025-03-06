@@ -76,19 +76,25 @@ function MyCars() {
                     </tr>
                 </thead>
                 <tbody>
-                    {cars.map((car) => (
-                        <tr key={car.car_id}>
-                            <td>{car.car_id}</td>
-                            <td>{car.name}</td>
-                            <td>{car.model}</td>
-                            <td>{car.year}</td>
-                            <td>{car.vin}</td>
-                            <td>
-                                <button className="button button-primary" onClick={() => handleUpdateCar(car.car_id)}>Update</button>
-                                <button className="button button-primary" onClick={() => handleDeleteCar(car.car_id)}>Delete</button>
-                            </td>
+                    {cars.length === 0 ? (
+                        <tr>
+                            <td colSpan="6" style={{ textAlign: 'center' }}>No cars available</td>
                         </tr>
-                    ))}
+                    ) : (
+                        cars.map((car) => (
+                            <tr key={car.car_id}>
+                                <td>{car.car_id}</td>
+                                <td>{car.name}</td>
+                                <td>{car.model}</td>
+                                <td>{car.year}</td>
+                                <td>{car.vin}</td>
+                                <td>
+                                    <button className="button button-primary" onClick={() => handleUpdateCar(car.car_id)}>Update</button>
+                                    <button className="button button-primary" onClick={() => handleDeleteCar(car.car_id)}>Delete</button>
+                                </td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </table>
 

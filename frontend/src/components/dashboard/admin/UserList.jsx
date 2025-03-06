@@ -76,18 +76,24 @@ function UserList() {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map((user) => (
-                        <tr key={user.user_id}>
-                            <td>{user.user_id}</td>
-                            <td>{user.username}</td>
-                            <td>{user.role}</td>
-                            <td>{user.email}</td>
-                            <td>
-                                <button className="button button-primary"  onClick={() => handleUpdateUser(user.user_id)}>Update</button>
-                                <button className="button button-primary"  onClick={() => handleDeleteUser(user.user_id)}>Delete</button>
-                            </td>
+                    {users.length === 0 ? (
+                        <tr>
+                            <td colSpan="5" style={{ textAlign: 'center' }}>No users available</td>
                         </tr>
-                    ))}
+                    ) : (
+                        users.map((user) => (
+                            <tr key={user.user_id}>
+                                <td>{user.user_id}</td>
+                                <td>{user.username}</td>
+                                <td>{user.role}</td>
+                                <td>{user.email}</td>
+                                <td>
+                                    <button className="button button-primary" onClick={() => handleUpdateUser(user.user_id)}>Update</button>
+                                    <button className="button button-primary" onClick={() => handleDeleteUser(user.user_id)}>Delete</button>
+                                </td>
+                            </tr>
+                        ))
+                    )}
                 </tbody>
             </table>
 
