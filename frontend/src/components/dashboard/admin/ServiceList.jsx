@@ -95,24 +95,28 @@ function ServiceList() {
                     </tr>
                 </thead>
                 <tbody>
-                    {services.map((service) => (
-                        <tr key={service.service_id}>
-                            <td>{service.service_id}</td>
-                            <td>{service.car_name}</td>
-                            <td>{service.mileage}</td>
-                            <td>{truncateText(service.service_type)}</td>
-                            <td>{formatDate(service.service_date)}</td>
-                            <td>{formatDate(service.next_service_date)}</td>
-                            <td>${service.cost}</td>
-                            <td title={service.notes}>
-                                {truncateText(service.notes)}
-                            </td>
-                            <td>
-                                <button className="button button-primary" onClick={() => handleUpdateService(service.service_id)}>Update</button>
-                                <button className="button button-primary" onClick={() => handleDeleteService(service.service_id)}>Delete</button>
-                            </td>
-                        </tr>
-                    ))}
+                    {services.length === 0 ? (
+                            <tr>
+                                <td colSpan="9" style={{ textAlign: "center" }}>No services available</td>
+                            </tr>
+                        ) : (
+                            services.map((service) => (
+                                <tr key={service.service_id}>
+                                    <td>{service.service_id}</td>
+                                    <td>{service.car_name || "N/A"}</td>
+                                    <td>{service.mileage || "0"}</td>
+                                    <td>{truncateText(service.service_type || "N/A")}</td>
+                                    <td>{formatDate(service.service_date) || "N/A"}</td>
+                                    <td>{formatDate(service.next_service_date) || "N/A"}</td>
+                                    <td>${service.cost || "0.00"}</td>
+                                    <td title={service.notes || "N/A"}>{truncateText(service.notes || "N/A")}</td>
+                                    <td>
+                                        <button className="button button-primary" onClick={() => handleUpdateService(service.service_id)}>Update</button>
+                                        <button className="button button-primary" onClick={() => handleDeleteService(service.service_id)}>Delete</button>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
                 </tbody>
             </table>
 

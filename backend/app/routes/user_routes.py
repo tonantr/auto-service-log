@@ -51,3 +51,29 @@ def load_cars(current_user):
         return jsonify({"message": ERROR_NO_CARS_FOUND}), 404
     
     return jsonify(cars), 200
+
+
+@user_bp.route("/cars/ids-and-names", methods=["GET"])
+@token_required
+def get_all_car_ids_and_names(current_user):
+    cars = UserService.get_all_car_ids_and_names(current_user)
+
+    if not cars:
+        return jsonify({"message": ERROR_NO_CARS_FOUND}), 404
+    
+    return jsonify(cars), 200
+
+
+@user_bp.route("/services", methods=["GET"])
+@token_required
+def load_services(current_user):
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=10, type=int)
+    car_id = request.args.get("car_id", type=int)  
+
+    services = UserService.get_services_for_car(car_id, page=page, per_page=per_page)
+
+    if not services:
+        return jsonify({"message": ERROR_NO_SERVICES_FOUND}), 404
+    
+    return jsonify(services), 200

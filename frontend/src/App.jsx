@@ -26,6 +26,7 @@ import SearchResults from "./components/dashboard/admin/SearchResults";
 import DashboardHomeUser from "./components/dashboard/user/DashboardHomeUser";
 import UserProfile from "./components/dashboard/user/UserProfile";
 import MyCars from "./components/dashboard/user/MyCars";
+import MyServices from "./components/dashboard/user/MyServices";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -86,6 +87,7 @@ function App() {
           <Route index element={<DashboardHomeUser />} />
           <Route path="profile" element={<UserProfile />} />
           <Route path="cars" element={<MyCars />} />
+          <Route path="services" element={<MyServices />} />
         </Route>
 
       </Routes>

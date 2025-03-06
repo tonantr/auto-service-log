@@ -73,6 +73,67 @@ class UserService:
             }
 
     @staticmethod
+    def get_all_car_ids_and_names(current_user):
+        try:
+            cars = Car.query.options(load_only(Car.car_id, Car.name)).filter(Car.user_id==current_user.user_id).all()
+            return [{"car_id": car.car_id, "name": car.name} for car in cars]
+        except Exception as e:
+            logger.error(f"Error in get_all_car_ids_and_names: {str(e)}")
+            return []
+
+    @staticmethod
+    def get_services_for_car(car_id, page=1, per_page=10):
+        try:
+            pagination = db.session.query(Service, Car.name.label("car_name")).join(Car).filter(Car.car_id == car_id).paginate(
+                page=page, per_page=per_page, error_out=False
+            )
+            
+            if pagination.items:
+                service_list = []
+                for service, car_name in pagination.items:
+                    service_list.append(
+                        {
+                            "service_id": service.service_id,
+                            "car_id": service.car_id,
+                            "car_name": car_name,
+                            "mileage": service.mileage,
+                            "service_type": service.service_type,
+                            "service_date": service.service_date,
+                            "next_service_date": service.next_service_date,
+                            "cost": service.cost,
+                            "notes": service.notes,
+                        }
+                    )
+
+                result = {
+                    "services": service_list,
+                    "total_services": pagination.total,
+                    "total_pages": pagination.pages,
+                    "current_page": pagination.page,
+                    "per_page": pagination.per_page,
+                }
+                return result
+            else:
+                logger.warning(ERROR_NO_SERVICES_FOUND)
+                return {
+                    "services": [],
+                    "total_services": 0,
+                    "total_pages": 0,
+                    "current_page": page,
+                    "per_page": per_page,
+                }
+
+        except Exception as e:
+            logger.error(f"Error in get_services_for_car: {str(e)}")
+            return {
+                    "services": [],
+                    "total_services": 0,
+                    "total_pages": 0,
+                    "current_page": page,
+                    "per_page": per_page,
+                }
+
+    @staticmethod
     def get_total_cars(current_user):
         try:
             return Car.query.filter_by(user_id=current_user.user_id).count()
