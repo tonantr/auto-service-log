@@ -9,7 +9,7 @@ function MyProfile() {
     const navigate = useNavigate();
 
     const handleUpdateProfile = (user_id) => {
-        window.confirm("Are you sure?")
+        navigate("/user/update-profile")
     };
 
     useEffect(() => {

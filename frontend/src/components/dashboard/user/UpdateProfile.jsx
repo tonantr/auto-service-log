@@ -3,13 +3,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { validatePassword, validateEmail } from "../../../validation"
 
-function UpdateUser() {
-    const { user_id } = useParams();
+function UpdateProfile() {
     const [data, setData] = useState({
         username: '',
         email: '',
         password: '',
-        role: 'user',
     });
 
     const [originalData, setOriginalData] = useState({});
@@ -21,36 +19,27 @@ function UpdateUser() {
     const getToken = () => localStorage.getItem('access_token');
 
     useEffect(() => {
-        if (!user_id) {
-            setError('Invalid user ID.');
-            return;
-        }
+        const fetchProfile = async () => {
+            const token = getToken()
+            if (!token) {
+                navigate("/login");
+                return;
+            }
 
-        const fetchUser = async () => {
             try {
-                const token = getToken();
-                if (!token) {
-                    navigate('/login');
-                    return;
-                }
-
-                const response = await axios.get(`/admin/user/${user_id}`,
-                    {
-                        headers: { Authorization: `Bearer ${token}` },
-                    }
-                );
-
-                if (response.status === 200) {
-                    const { username, email, role } = response.data;
-                    setData({ username, email, role, password: "" });
-                    setOriginalData({ username, email });
-                }
+                const response = await axios.get("/user/profile", {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                const { username, email } = response.data;
+                setData({ username, email, password: "" });
+                setOriginalData({ username, email });
             } catch (err) {
-                setError('Failed to fetch user data.');
+                console.error("Error fetching user profile:", err);
+                navigate("/login");
             }
         };
-        fetchUser()
-    }, [user_id]);
+        fetchProfile()
+    }, [navigate])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -79,7 +68,7 @@ function UpdateUser() {
         }
 
         try {
-            const response = await axios.put(`/admin/update_user/${user_id}`, data, {
+            const response = await axios.put("/user/update_profile", data, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -88,10 +77,9 @@ function UpdateUser() {
                     username: '',
                     email: '',
                     password: '',
-                    role: 'user',
                 });
                 setError('');
-                navigate("/admin/users")
+                navigate("/login")
             }
         } catch (err) {
             if (err.response?.status === 401) {
@@ -101,7 +89,7 @@ function UpdateUser() {
                 setError(err.response.data.message);
             } else {
                 console.error('Error:', err);
-                setError("Failed to update a user.");
+                setError("Failed to update profile.");
             }
         }
     };
@@ -110,7 +98,7 @@ function UpdateUser() {
 
     return (
         <div>
-            <h3>Update User</h3>
+            <h3>Update Profile</h3>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <form onSubmit={handleSubmit}>
                 <div style={{ marginBottom: '10px' }}>
@@ -148,22 +136,10 @@ function UpdateUser() {
                     />
                 </div>
 
-                <div style={{ marginBottom: '10px' }}>
-                    <div>
-                        <label>Role</label>
-                    </div>
-                    <select
-                        value={data.role}
-                        onChange={(e) => setData({ ...data, role: e.target.value })}
-                    >
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
 
                 <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
                     <button type="submit" className="button button-primary" disabled={!isDataChanged}>Update</button>
-                    <button type="button" className="button button-secondary" onClick={() => navigate("/admin/users")}>Cancel</button>
+                    <button type="button" className="button button-secondary" onClick={() => navigate("/user/profile")}>Cancel</button>
                 </div>
             </form>
 
@@ -171,4 +147,4 @@ function UpdateUser() {
     );
 }
 
-export default UpdateUser;
+export default UpdateProfile;

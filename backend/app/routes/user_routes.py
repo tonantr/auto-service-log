@@ -39,6 +39,22 @@ def load_profile(current_user):
     return jsonify(user_profile.to_dict()), 200
 
 
+@user_bp.route("/update_profile", methods=["PUT"])
+@token_required
+def update_profile(current_user):
+    data = request.get_json()
+
+    username = data.get("username")
+    email = data.get("email")
+    password = data.get("password")
+
+    response = UserService.update_profile(current_user, username, email, password)
+    if "Error" in response["message"]:
+            return jsonify(response), 400
+        
+    return jsonify(response), 200
+
+
 @user_bp.route("/cars", methods=["GET"])
 @token_required
 def load_cars(current_user):

@@ -7,7 +7,7 @@ from app.models.service import Service
 from app.utils.logging_config import logger
 from app.database.database import db
 from app.utils.auth_utils import hash_password
-from app.utils.validation import validate_username_and_email, validate_vin
+from app.utils.validation import validate_email, validate_username, validate_vin
 from app.utils.constants import (
     ADD_SUCCESS,
     UPDATE_SUCCESS,
@@ -29,6 +29,45 @@ class UserService:
         except Exception as e:
             logger.error(f"Error in get_profile: {str(e)}")
             return None
+
+    @staticmethod
+    def update_profile(current_user, username=None, email=None, password=None):
+        try:
+            user = User.query.get(current_user.user_id)
+            if not user:
+                logger.warning(ERROR_USER_NOT_FOUND)
+                return {"message": ERROR_USER_NOT_FOUND}
+            
+            updated = False
+
+            if username and username != user.username:
+                username_error = validate_username(username)
+                if username_error:
+                    return username_error
+                user.username = username
+                updated = True
+
+            if email and email != user.email:
+                email_error = validate_email(email)
+                if email_error:
+                    return email_error
+                user.email = email
+                updated = True
+
+            if password:
+                user.password = hash_password(password)
+                updated = True
+
+            if updated:
+                db.session.commit()
+                return {"message": UPDATE_SUCCESS}
+            else:
+                return {"message": "No changes made."}
+
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in update_profile: {str(e)}")
+            return {"message": "An unexpected error occurred while updating the profile."}
 
     @staticmethod
     def get_cars_for_user(current_user, page=1, per_page=10):

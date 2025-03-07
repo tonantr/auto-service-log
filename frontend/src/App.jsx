@@ -25,6 +25,7 @@ import SearchResults from "./components/dashboard/admin/SearchResults";
 // --- User Components ---
 import DashboardHomeUser from "./components/dashboard/user/DashboardHomeUser";
 import MyProfile from "./components/dashboard/user/MyProfile";
+import UpdateProfile from "./components/dashboard/user/UpdateProfile";
 import MyCars from "./components/dashboard/user/MyCars";
 import MyServices from "./components/dashboard/user/MyServices";
 import SearchPage from "./components/dashboard/user/SearchPage";
@@ -87,6 +88,7 @@ function App() {
         >
           <Route index element={<DashboardHomeUser />} />
           <Route path="profile" element={<MyProfile />} />
+          <Route path="update-profile" element={<UpdateProfile />} />
           <Route path="cars" element={<MyCars />} />
           <Route path="services" element={<MyServices />} />
           <Route path="search-page" element={<SearchPage />} />

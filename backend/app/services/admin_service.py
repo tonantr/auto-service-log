@@ -6,7 +6,7 @@ from app.models.service import Service
 from app.utils.logging_config import logger
 from app.database.database import db
 from app.utils.auth_utils import hash_password
-from app.utils.validation import validate_username_and_email, validate_vin
+from app.utils.validation import validate_email, validate_username, validate_vin
 from app.utils.constants import (
     ADD_SUCCESS,
     UPDATE_SUCCESS,
@@ -79,9 +79,13 @@ class AdminService:
     @staticmethod
     def add_user(username, email, password, role="user"):
         try:
-            result = validate_username_and_email(username, email)
-            if result:
-                return result
+            username_error = validate_username(username)
+            if username_error:
+                return username_error
+            
+            email_error = validate_email(email)
+            if email_error:
+                return email_error
 
             password = hash_password(password)
             new_user = User(
@@ -102,19 +106,20 @@ class AdminService:
             if not user:
                 logger.warning(ERROR_USER_NOT_FOUND)
                 return {"message": ERROR_USER_NOT_FOUND}
-
-            if username or email:
-                result = validate_username_and_email(username, email)
-                if result:
-                    return result
-
+            
             updated = False
 
             if username and username != user.username:
+                username_error = validate_username(username)
+                if username_error:
+                    return username_error
                 user.username = username
                 updated = True
 
             if email and email != user.email:
+                email_error = validate_email(email)
+                if email_error:
+                    return email_error
                 user.email = email
                 updated = True
 
