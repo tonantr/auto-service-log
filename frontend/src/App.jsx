@@ -31,6 +31,7 @@ import UserAddCar from "./components/dashboard/user/UserAddCar";
 import UserUpdateCar from "./components/dashboard/user/UserUpdateCar";
 import MyServices from "./components/dashboard/user/MyServices";
 import UserAddService from "./components/dashboard/user/UserAddService";
+import UserUpdateService from "./components/dashboard/user/UserUpdateService";
 import SearchPage from "./components/dashboard/user/SearchPage";
 import UserDeletePage from "./components/dashboard/user/UserDeletePage";
 
@@ -98,6 +99,7 @@ function App() {
           <Route path="update-car/:car_id" element={<UserUpdateCar />} />
           <Route path="services" element={<MyServices />} />
           <Route path="add-service" element={<UserAddService />} />
+          <Route path="update-service/:service_id" element={<UserUpdateService />} />
           <Route path="search-page" element={<SearchPage />} />
           <Route path="delete/:entity/:id" element={<UserDeletePage />} />
         </Route>

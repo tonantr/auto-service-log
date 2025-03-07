@@ -24,7 +24,7 @@ function MyServices() {
     };
 
     const handleUpdateService = (service_id) => {
-        window.confirm("Are you sure?")
+        navigate(`/user/update-service/${service_id}`)
     };
 
     const handleDeleteService = (service_id) => {
