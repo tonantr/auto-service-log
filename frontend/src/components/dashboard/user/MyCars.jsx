@@ -21,7 +21,7 @@ function MyCars() {
     };
 
     const handleUpdateCar = (car_id) => {
-        window.confirm("Are you sure?")
+        navigate(`/user/update-car/${car_id}`)
     };
 
     const handleDeleteCar = (car_id) => {

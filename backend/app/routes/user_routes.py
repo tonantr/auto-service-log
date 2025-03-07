@@ -80,6 +80,17 @@ def get_all_car_ids_and_names(current_user):
     return jsonify(cars), 200
 
 
+@user_bp.route("/car/<int:car_id>", methods=["GET"])
+@token_required
+def get_car(current_user, car_id):
+    car = UserService.get_car(car_id)
+
+    if not car:
+        return jsonify({"message": ERROR_CAR_NOT_FOUND}), 404
+    
+    return jsonify(car), 200
+
+
 @user_bp.route("/add_car", methods=["POST"])
 @token_required
 def add_car(current_user):
@@ -94,6 +105,24 @@ def add_car(current_user):
     if "Error" in response["message"]:
         return jsonify(response), 400
     
+    return jsonify(response), 200
+
+
+@user_bp.route("/update_car/<int:car_id>", methods=["PUT"])
+@token_required
+def update_car(current_user, car_id):
+    data = request.get_json()
+
+    name = data.get("name")
+    model = data.get("model")
+    year = data.get("year")
+    vin = data.get("vin")
+
+    response = UserService.update_car(car_id, name, model, year, vin)
+
+    if "Error" in response["message"]:
+        return jsonify(response), 400
+        
     return jsonify(response), 200
 
 

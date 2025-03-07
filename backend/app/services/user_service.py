@@ -18,6 +18,7 @@ from app.utils.constants import (
     ERROR_NO_CARS_FOUND,
     ERROR_SERVICE_NOT_FOUND,
     ERROR_NO_SERVICES_FOUND,
+    NO_CHANGES_MADE,
 )
 
 
@@ -62,7 +63,7 @@ class UserService:
                 db.session.commit()
                 return {"message": UPDATE_SUCCESS}
             else:
-                return {"message": "No changes made."}
+                return {"message": NO_CHANGES_MADE}
 
         except Exception as e:
             db.session.rollback()
@@ -122,6 +123,16 @@ class UserService:
             return []
 
     @staticmethod
+    def get_car(car_id):
+        try:
+            car = Car.query.get(car_id)
+            if car:
+                return car.to_dict()
+        except Exception as e:
+            logger.error(f"Error in get_car: {str(e)}")
+            return None
+
+    @staticmethod
     def add_car(current_user, name, model, year, vin):
         try:
             vin_error = validate_vin(vin)
@@ -139,6 +150,46 @@ class UserService:
             db.session.rollback()
             logger.error(f"Error in add_car: {str(e)}")
             return {"message": "An unexpected error occurred while adding the car."}
+
+    @staticmethod
+    def update_car(car_id, name=None, model=None, year=None, vin=None):
+        try:
+            car = Car.query.get(car_id)
+            if not car:
+                logger.warning(ERROR_CAR_NOT_FOUND)
+                return {"message": ERROR_CAR_NOT_FOUND}
+            
+            updated = False
+
+            if name and name != car.name:
+                car.name = name
+                updated = True
+            
+            if model and model != car.model:
+                car.model = model
+                updated = True
+            
+            if year and int(year) != car.year:
+                car.year = year
+                updated = True
+
+            if vin and vin != car.vin:
+                vin_error = validate_vin(vin)
+                if vin_error:
+                    return vin_error
+                car.vin = vin
+                updated = True
+            
+            if updated:
+                db.session.commit()
+                return {"message": UPDATE_SUCCESS}
+            else:
+                return {"message": NO_CHANGES_MADE}
+
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in update_car: {str(e)}")
+            return {"message": "An unexpected error occurred while updating the car."}
 
     @staticmethod
     def get_services_for_car(car_id, page=1, per_page=10):

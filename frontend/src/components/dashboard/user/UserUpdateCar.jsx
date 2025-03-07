@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { validateVIN, validateYear } from "../../../validation"
 
-function UpdateCar() {
+function UserUpdateCar() {
     const { car_id } = useParams();
     const [data, setData] = useState({
         name: '',
@@ -29,7 +29,7 @@ function UpdateCar() {
                     return;
                 }
 
-                const response = await axios.get(`/admin/car/${car_id}`,
+                const response = await axios.get(`/user/car/${car_id}`,
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }
@@ -74,12 +74,12 @@ function UpdateCar() {
         }
 
         try {
-            const response = await axios.put(`/admin/update_car/${car_id}`, data, {
+            const response = await axios.put(`/user/update_car/${car_id}`, data, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
             if (response.status === 200) {
-                navigate("/admin/cars");
+                navigate("/user/cars");
             }
         } catch (err) {
             if (err.response?.status === 401) {
@@ -157,11 +157,11 @@ function UpdateCar() {
                 </div>
                 <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
                     <button type="submit" className="button button-primary" disabled={!isDataChanged}>Update</button>
-                    <button type="button" className="button button-secondary" onClick={() => navigate("/admin/cars")}>Cancel</button>
+                    <button type="button" className="button button-secondary" onClick={() => navigate("/user/cars")}>Cancel</button>
                 </div>
             </form>
         </div>
     );
 }
 
-export default UpdateCar
+export default UserUpdateCar

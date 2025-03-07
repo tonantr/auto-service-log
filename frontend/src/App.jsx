@@ -28,6 +28,7 @@ import MyProfile from "./components/dashboard/user/MyProfile";
 import UpdateProfile from "./components/dashboard/user/UpdateProfile";
 import MyCars from "./components/dashboard/user/MyCars";
 import UserAddCar from "./components/dashboard/user/UserAddCar";
+import UserUpdateCar from "./components/dashboard/user/UserUpdateCar";
 import MyServices from "./components/dashboard/user/MyServices";
 import SearchPage from "./components/dashboard/user/SearchPage";
 
@@ -92,6 +93,7 @@ function App() {
           <Route path="update-profile" element={<UpdateProfile />} />
           <Route path="cars" element={<MyCars />} />
           <Route path="add-car" element={<UserAddCar />} />
+          <Route path="update-car/:car_id" element={<UserUpdateCar />} />
           <Route path="services" element={<MyServices />} />
           <Route path="search-page" element={<SearchPage />} />
         </Route>

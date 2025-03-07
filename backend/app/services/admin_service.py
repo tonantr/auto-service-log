@@ -270,7 +270,7 @@ class AdminService:
                 car.model = model
                 updated = True
 
-            if year and car.year != year:
+            if year and car.year != int(year):
                 car.year = year
                 updated = True
             
