@@ -4,8 +4,6 @@ from app.services.user_service import UserService
 from app.utils.auth_utils import token_required
 from app.utils.logging_config import logger
 from app.utils.constants import (
-    ERROR_FETCHING_DATA,
-    ERROR_NO_USERS_FOUND,
     ERROR_USER_NOT_FOUND,
     ERROR_NO_CARS_FOUND,
     ERROR_CAR_NOT_FOUND,
@@ -151,109 +149,99 @@ def load_services(current_user):
     
     return jsonify(services), 200
 
+
 @user_bp.route("/service/<int:service_id>", methods=["GET"])
 @token_required
 def get_service(current_user, service_id):
-    try:
-        service = UserService.get_service(service_id)
+    service = UserService.get_service(service_id)
 
-        if service:
-            return jsonify(service), 200
-        else:
-            logger.warning(ERROR_SERVICE_NOT_FOUND)
-            return jsonify(message=ERROR_SERVICE_NOT_FOUND), 404
-    except Exception as e:
-        logger.error(f"Error in get_service: {str(e)}")
-        return jsonify({"message": "An unexpected error occurred."}), 500
+    if service:
+        return jsonify(service), 200
+    else:
+        logger.warning(ERROR_SERVICE_NOT_FOUND)
+        return jsonify(message=ERROR_SERVICE_NOT_FOUND), 404
+
 
 @user_bp.route("/add_service", methods=["POST"])
 @token_required
 def add_service(current_user):
-    try:
-        data = request.get_json()
-        car_id = data.get("car_id")  
-        mileage = data.get("mileage")
-        service_type = data.get("type") 
-        service_date = data.get("date")  
-        next_service_date = data.get("nextDate") 
-        cost = data.get("cost")
-        notes = data.get("notes")
+    data = request.get_json()
+    car_id = data.get("car_id")  
+    mileage = data.get("mileage")
+    service_type = data.get("type") 
+    service_date = data.get("date")  
+    next_service_date = data.get("nextDate") 
+    cost = data.get("cost")
+    notes = data.get("notes")
 
-        service_date = datetime.strptime(service_date, "%Y-%m-%d").date()
+    service_date = datetime.strptime(service_date, "%Y-%m-%d").date()
 
-        if not next_service_date:
-            next_service_date = None
-        else:
-            next_service_date = datetime.strptime(next_service_date, "%Y-%m-%d").date()
+    if not next_service_date:
+        next_service_date = None
+    else:
+        next_service_date = datetime.strptime(next_service_date, "%Y-%m-%d").date()
 
-        mileage = int(mileage) if mileage else 0
+    mileage = int(mileage) if mileage else 0
 
-        cost = float(cost) if cost else 0.0
+    cost = float(cost) if cost else 0.0
 
-        notes = notes if notes else None
+    notes = notes if notes else None
         
-        response = UserService.add_service(car_id, mileage, service_type, service_date, next_service_date, cost, notes)
-        if "Error" in response["message"]:
-            return jsonify(response), 400
+    response = UserService.add_service(car_id, mileage, service_type, service_date, next_service_date, cost, notes)
+    if "Error" in response["message"]:
+        return jsonify(response), 400
 
-        return jsonify(response), 200
-
-    except Exception as e:
-        logger.error(f"Error in add_service: {str(e)}")
-        return jsonify({"message": "An unexpected error occurred."}), 500
+    return jsonify(response), 200
 
 
 @user_bp.route("/update_service/<int:service_id>", methods=["PUT"])
 @token_required
 def update_service(current_user, service_id):
-    try:
-        data = request.get_json()
-        mileage = data.get("mileage")
-        service_type = data.get("type") 
-        service_date = data.get("date")  
-        next_service_date = data.get("nextDate") 
-        cost = data.get("cost")
-        notes = data.get("notes")
+    data = request.get_json()
+    mileage = data.get("mileage")
+    service_type = data.get("type") 
+    service_date = data.get("date")  
+    next_service_date = data.get("nextDate") 
+    cost = data.get("cost")
+    notes = data.get("notes")
 
-        service_date = datetime.strptime(service_date, "%Y-%m-%d").date()
+    service_date = datetime.strptime(service_date, "%Y-%m-%d").date()
 
-        if not next_service_date:
-            next_service_date = None
-        else:
-            next_service_date = datetime.strptime(next_service_date, "%Y-%m-%d").date()
+    if not next_service_date:
+        next_service_date = None
+    else:
+        next_service_date = datetime.strptime(next_service_date, "%Y-%m-%d").date()
 
-        mileage = int(mileage) if mileage else 0
+    mileage = int(mileage) if mileage else 0
 
-        cost = float(cost) if cost else 0.0
+    cost = float(cost) if cost else 0.0
 
-        notes = notes if notes else None
+    notes = notes if notes else None
 
-        response = UserService.update_service(service_id, mileage, service_type, service_date, next_service_date, cost, notes)
-        if "Error" in response["message"]:
-            return jsonify(response), 400
+    response = UserService.update_service(service_id, mileage, service_type, service_date, next_service_date, cost, notes)
+    if "Error" in response["message"]:
+        return jsonify(response), 400
 
-        return jsonify(response), 200
+    return jsonify(response), 200
 
-    except Exception as e:
-        logger.error(f"Error in update_service: {str(e)}")
-        return jsonify({"message": "An unexpected error occurred."}), 500
-
+   
+@user_bp.route("/delete_service/<int:service_id>", methods=["DELETE"])
+@token_required
+def delete_service(current_user, service_id):
+    response = UserService.delete_service(service_id)
+    return jsonify(response), 200
+    
 
 @user_bp.route("/search", methods=['GET'])
 @token_required
 def search(current_user):
-    try:
-        page = request.args.get('page', default=1, type=int)
-        per_page = request.args.get('per_page', default=10, type=int)
-        query = request.args.get('query', '')
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=10, type=int)
+    query = request.args.get('query', '')
 
-        if not query:
-            return jsonify({'cars': [], 'services': []})
+    if not query:
+        return jsonify({'cars': [], 'services': []})
         
-        result = UserService.search(current_user, query, page=page, per_page=per_page)
+    result = UserService.search(current_user, query, page=page, per_page=per_page)
 
-        return jsonify(result), 200
-
-    except Exception as e:
-        logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
-        return jsonify(message=ERROR_FETCHING_DATA), 500
+    return jsonify(result), 200

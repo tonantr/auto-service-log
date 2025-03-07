@@ -13,7 +13,6 @@ from app.utils.constants import (
     UPDATE_SUCCESS,
     DELETE_SUCCESS,
     ERROR_CAR_NOT_FOUND,
-    ERROR_NO_USERS_FOUND,
     ERROR_USER_NOT_FOUND,
     ERROR_NO_CARS_FOUND,
     ERROR_SERVICE_NOT_FOUND,
@@ -327,6 +326,23 @@ class UserService:
         except Exception as e:
             db.session.rollback()
             logger.error(f"Error in update_service: {str(e)}")
+            return {"message": "An unexpected error occurred."}
+
+    @staticmethod
+    def delete_service(service_id):
+        try:
+            service = Service.query.filter_by(service_id=service_id).first()
+            if not service:
+                logger.warning(ERROR_SERVICE_NOT_FOUND)
+                return {"message": ERROR_SERVICE_NOT_FOUND}
+            
+            db.session.delete(service)
+            db.session.commit()
+
+            return {"message": DELETE_SUCCESS}
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in delete_service: {str(e)}")
             return {"message": "An unexpected error occurred."}
 
     @staticmethod

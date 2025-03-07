@@ -28,7 +28,7 @@ function MyServices() {
     };
 
     const handleDeleteService = (service_id) => {
-        window.confirm("Are you sure?")
+        navigate(`/user/delete/service/${service_id}`)
     }
 
     const options = cars.map(car => ({
