@@ -192,6 +192,23 @@ class UserService:
             return {"message": "An unexpected error occurred while updating the car."}
 
     @staticmethod
+    def delete_car(car_id):
+        try:
+            car = Car.query.get(car_id)
+            if not car:
+                logger.warning(ERROR_CAR_NOT_FOUND)
+                return {"message": ERROR_CAR_NOT_FOUND}
+            
+            db.session.delete(car)
+            db.session.commit()
+            
+            return {"message": DELETE_SUCCESS}
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in delete_car: {str(e)}")
+            return {"message": "An unexpected error occurred."}
+
+    @staticmethod
     def get_services_for_car(car_id, page=1, per_page=10):
         try:
             pagination = db.session.query(Service, Car.name.label("car_name")).join(Car).filter(Car.car_id == car_id).paginate(

@@ -25,7 +25,7 @@ function MyCars() {
     };
 
     const handleDeleteCar = (car_id) => {
-        window.confirm("Are you sure?")
+        navigate(`/user/delete/car/${car_id}`)
     };
 
     useEffect(() => {

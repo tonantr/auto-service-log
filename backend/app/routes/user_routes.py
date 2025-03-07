@@ -126,6 +126,17 @@ def update_car(current_user, car_id):
     return jsonify(response), 200
 
 
+@user_bp.route("/delete_car/<int:car_id>", methods=["DELETE"])
+@token_required
+def delete_car(current_user, car_id):
+    response = UserService.delete_car(car_id)
+
+    if "Error" in response["message"]:
+        return jsonify(response), 400
+        
+    return jsonify(response), 200
+
+
 @user_bp.route("/services", methods=["GET"])
 @token_required
 def load_services(current_user):

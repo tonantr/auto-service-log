@@ -31,6 +31,7 @@ import UserAddCar from "./components/dashboard/user/UserAddCar";
 import UserUpdateCar from "./components/dashboard/user/UserUpdateCar";
 import MyServices from "./components/dashboard/user/MyServices";
 import SearchPage from "./components/dashboard/user/SearchPage";
+import UserDeletePage from "./components/dashboard/user/UserDeletePage";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -96,6 +97,7 @@ function App() {
           <Route path="update-car/:car_id" element={<UserUpdateCar />} />
           <Route path="services" element={<MyServices />} />
           <Route path="search-page" element={<SearchPage />} />
+          <Route path="delete/:entity/:id" element={<UserDeletePage />} />
         </Route>
 
       </Routes>

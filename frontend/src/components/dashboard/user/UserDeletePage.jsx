@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function DeletePage() {
+function UserDeletePage() {
     const { entity, id } = useParams();
     const navigate = useNavigate();
     const [error, setError] = useState("");
@@ -20,19 +20,19 @@ function DeletePage() {
                 navigate('/login');
                 return;
             }
-            const response = await axios.delete(`/admin/delete_${entity}/${id}`, {
+            const response = await axios.delete(`/user/delete_${entity}/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-            navigate(`/admin/${entity}s`); 
-            
+            navigate(`/user/${entity}s`);
+
         } catch (err) {
             if (err.response) {
                 setError(err.response.data.message);
             } else {
                 setError("Failed to delete.");
             }
-        } 
+        }
     };
 
     useEffect(() => {
@@ -52,22 +52,22 @@ function DeletePage() {
         <div>
             <h3>Deleting {entity}...</h3>
             {error && <p style={{ color: "red" }}>{error}</p>}
-    
+
             {!isConfirmed ? (
                 <div>
                     <p>Are you sure you want to delete this {entity}?</p>
                     <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
                         <button className="button button-primary" onClick={() => setIsConfirmed(true)}>Delete</button>
-                        <button className="button button-secondary" onClick={() => navigate(`/admin/${entity}s`)}>Cancel</button>
+                        <button className="button button-secondary" onClick={() => navigate(`/user/${entity}s`)}>Cancel</button>
                     </div>
                 </div>
             ) : (
                 <div>
-                    
+
                 </div>
             )}
         </div>
     );
 }
 
-export default DeletePage;
+export default UserDeletePage;
