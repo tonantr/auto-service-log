@@ -122,6 +122,25 @@ class UserService:
             return []
 
     @staticmethod
+    def add_car(current_user, name, model, year, vin):
+        try:
+            vin_error = validate_vin(vin)
+            if vin_error:
+                return vin_error
+            
+            new_car = Car(
+                user_id = current_user.user_id, name = name, model = model, year = year, vin = vin
+            )
+
+            db.session.add(new_car)
+            db.session.commit()
+            return {"message": ADD_SUCCESS}
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in add_car: {str(e)}")
+            return {"message": "An unexpected error occurred while adding the car."}
+
+    @staticmethod
     def get_services_for_car(car_id, page=1, per_page=10):
         try:
             pagination = db.session.query(Service, Car.name.label("car_name")).join(Car).filter(Car.car_id == car_id).paginate(

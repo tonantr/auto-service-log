@@ -17,7 +17,7 @@ function MyCars() {
     } = usePagination();
 
     const handleAddCar = () => {
-        window.confirm("Are you sure?")
+        navigate("/user/add-car")
     };
 
     const handleUpdateCar = (car_id) => {

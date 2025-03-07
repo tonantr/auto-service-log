@@ -80,6 +80,23 @@ def get_all_car_ids_and_names(current_user):
     return jsonify(cars), 200
 
 
+@user_bp.route("/add_car", methods=["POST"])
+@token_required
+def add_car(current_user):
+    data = request.get_json()
+
+    name = data.get("name")
+    model = data.get("model")
+    year = data.get("year")
+    vin = data.get("vin")
+
+    response = UserService.add_car(current_user, name, model, year, vin)
+    if "Error" in response["message"]:
+        return jsonify(response), 400
+    
+    return jsonify(response), 200
+
+
 @user_bp.route("/services", methods=["GET"])
 @token_required
 def load_services(current_user):

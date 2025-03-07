@@ -243,7 +243,7 @@ class AdminService:
         except Exception as e:
             db.session.rollback()
             logger.error(f"Error in add_car: {str(e)}")
-            return {"message": "Error in add_car."}
+            return {"message": "An unexpected error occurred while adding the car."}
 
     @staticmethod
     def update_car(car_id, name=None, model=None, year=None, vin=None):
