@@ -261,6 +261,20 @@ class UserService:
                 }
 
     @staticmethod
+    def add_service(car_id, mileage, service_type, service_date, next_service_date, cost, notes):
+        try:
+            new_service = Service (
+                car_id=car_id, mileage=mileage, service_type=service_type, service_date=service_date, next_service_date=next_service_date, cost=cost, notes=notes
+            )
+            db.session.add(new_service)
+            db.session.commit()
+            return {"message": ADD_SUCCESS}
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in add_service: {str(e)}")
+            return {"message": "An unexpected error occurred."}
+
+    @staticmethod
     def get_total_cars(current_user):
         try:
             return Car.query.filter_by(user_id=current_user.user_id).count()

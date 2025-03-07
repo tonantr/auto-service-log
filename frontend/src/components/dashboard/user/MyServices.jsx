@@ -20,7 +20,7 @@ function MyServices() {
     } = usePagination();
 
     const handleAddService = () => {
-        window.confirm("Are you sure?")
+        navigate("/user/add-service")
     };
 
     const handleUpdateService = (service_id) => {

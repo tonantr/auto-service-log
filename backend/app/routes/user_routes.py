@@ -152,6 +152,43 @@ def load_services(current_user):
     return jsonify(services), 200
 
 
+@user_bp.route("/add_service", methods=["POST"])
+@token_required
+def add_service(current_user):
+    try:
+        data = request.get_json()
+        car_id = data.get("car_id")  
+        mileage = data.get("mileage")
+        service_type = data.get("type") 
+        service_date = data.get("date")  
+        next_service_date = data.get("nextDate") 
+        cost = data.get("cost")
+        notes = data.get("notes")
+
+        service_date = datetime.strptime(service_date, "%Y-%m-%d").date()
+
+        if not next_service_date:
+            next_service_date = None
+        else:
+            next_service_date = datetime.strptime(next_service_date, "%Y-%m-%d").date()
+
+        mileage = int(mileage) if mileage else 0
+
+        cost = float(cost) if cost else 0.0
+
+        notes = notes if notes else None
+        
+        response = UserService.add_service(car_id, mileage, service_type, service_date, next_service_date, cost, notes)
+        if "Error" in response["message"]:
+            return jsonify(response), 400
+
+        return jsonify(response), 200
+
+    except Exception as e:
+        logger.error(f"Error in add_service: {str(e)}")
+        return jsonify({"message": "An unexpected error occurred."}), 500
+
+
 @user_bp.route("/search", methods=['GET'])
 @token_required
 def search(current_user):
