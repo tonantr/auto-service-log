@@ -31,5 +31,5 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     DEBUG = False
     FLASK_HOST = "0.0.0.0"
-    FLASK_PORT = 8000
+    FLASK_PORT = 8080
     FLASK_DEBUG = False
