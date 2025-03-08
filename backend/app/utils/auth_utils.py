@@ -84,7 +84,7 @@ def authenticate(username, password):
 
         if not user:
             logger.warning(f"User '{username}' not found")
-            return False, None, None
+            return False, None, None, None
 
         if user:
             stored_password = user.password
@@ -99,7 +99,7 @@ def authenticate(username, password):
                 return True, access_token, role, username
             
             logger.warning(f"Incorrect password for user '{username}'")
-            return False, None, None
+            return False, None, None, None
     except Exception as e:
         logger.error(f"Error in authenticate: {e}")
-        return False, None
+        return False, None, None, None
