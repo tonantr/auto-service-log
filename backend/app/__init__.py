@@ -6,12 +6,13 @@ from app.routes.admin_routes import admin_bp
 from app.routes.user_routes import user_bp
 from app.routes.auth_routes import auth_bp
 from app.database.database import db
+from config import DevelopmentConfig, ProductionConfig
 
 
-def create_app():
+def create_app(config_class=ProductionConfig):
     app = Flask(__name__)
 
-    app.config.from_object(Config)
+    app.config.from_object(config_class)
 
     logging.basicConfig(
         filename="app.log",

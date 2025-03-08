@@ -3,16 +3,14 @@ from waitress import serve
 from config import DevelopmentConfig, ProductionConfig
 # from app.database.database import db
 
-
-app = create_app()
+config = ProductionConfig 
+app = create_app(config)
 
 # with app.app_context():
 #     db.create_all()
 
 
 if __name__ == "__main__":
-
-    config = ProductionConfig
 
     host = config.FLASK_HOST
     port = config.FLASK_PORT
