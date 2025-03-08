@@ -5,9 +5,10 @@ from app.routes.admin_routes import admin_bp
 from app.routes.user_routes import user_bp
 from app.routes.auth_routes import auth_bp
 from app.database.database import db
+from config import DevelopmentConfig, ProductionConfig
 
 
-def create_app(config_class=None):
+def create_app(config_class=ProductionConfig):
     if config_class is None:
         raise ValueError("No configuration class provided")
     

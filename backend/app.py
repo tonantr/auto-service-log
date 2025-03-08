@@ -3,7 +3,7 @@ from waitress import serve
 from config import DevelopmentConfig, ProductionConfig
 # from app.database.database import db
 
-config = DevelopmentConfig 
+config = ProductionConfig 
 app = create_app(config)
 
 # with app.app_context():
