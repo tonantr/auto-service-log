@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 
 function DashboardHome() {
     const [dashboardData, setDashboardData] = useState({
@@ -22,7 +23,7 @@ function DashboardHome() {
         }
 
         axios
-            .get('/admin/dashboard_home', {
+            .get(`${BASE_URL}/admin/dashboard_home`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
