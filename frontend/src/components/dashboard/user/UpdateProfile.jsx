@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { validatePassword, validateEmail } from "../../../validation"
+import { BASE_URL } from "../../../config";
 
 function UpdateProfile() {
     const [data, setData] = useState({
@@ -27,7 +28,7 @@ function UpdateProfile() {
             }
 
             try {
-                const response = await axios.get("/user/profile", {
+                const response = await axios.get(`${BASE_URL}/user/profile`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 const { username, email } = response.data;
@@ -68,7 +69,7 @@ function UpdateProfile() {
         }
 
         try {
-            const response = await axios.put("/user/update_profile", data, {
+            const response = await axios.put(`${BASE_URL}/user/update_profile`, data, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import usePagination from "../../../usePagination";
+import { BASE_URL } from "../../../config";
 
 function SearchPage() {
     const location = useLocation();
@@ -31,7 +32,7 @@ function SearchPage() {
         const fetchResults = async () => {
             if (!query) return;
             try {
-                const response = await axios.get(`/user/search?query=${query}`, {
+                const response = await axios.get(`${BASE_URL}/user/search?query=${query}`, {
                     headers: { Authorization: `Bearer ${token}` },
                     params: { page, per_page: perPage },
                 });
