@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../../config';
 
 function Login( {setIsAuthenticated, setRole}) {
     const [username, setUsername] = useState('');
@@ -13,7 +14,7 @@ function Login( {setIsAuthenticated, setRole}) {
         e.preventDefault();
 
         try {
-            const response = await axios.post('/', {
+            const response = await axios.post(`${BASE_URL}/`, {
                 username, password,
             });
 

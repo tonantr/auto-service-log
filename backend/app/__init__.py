@@ -8,7 +8,7 @@ from app.database.database import db
 from config import DevelopmentConfig, ProductionConfig
 
 
-def create_app(config_class=ProductionConfig):
+def create_app(config_class=DevelopmentConfig):
     if config_class is None:
         raise ValueError("No configuration class provided")
     
