@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { validatePassword, validateEmail } from "../../../validation"
+import { BASE_URL } from "../../../config";
 
 function AddUser() {
     const [username, setUsername] = useState("");
@@ -37,7 +38,7 @@ function AddUser() {
         const data = { username, email, password, role };
 
         try {
-            const response = await axios.post("/admin/add_user", data, {
+            const response = await axios.post(`${BASE_URL}/admin/add_user`, data, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
