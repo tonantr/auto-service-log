@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
 import usePagination from "../../../usePagination";
+import { BASE_URL } from "../../../config";
 
 function MyServices() {
     const [services, setServices] = useState([]);
@@ -47,7 +48,7 @@ function MyServices() {
 
         const fetchCars = async () => {
             try {
-                const response = await axios.get('/user/cars/ids-and-names', {
+                const response = await axios.get(`${BASE_URL}/user/cars/ids-and-names`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setCars(response.data)
@@ -74,7 +75,7 @@ function MyServices() {
 
         const fetchServices = async () => {
             try {
-                const response = await axios.get('/user/services', {
+                const response = await axios.get(`${BASE_URL}/user/services`, {
                     headers: { Authorization: `Bearer ${token}` },
                     params: { page, per_page: perPage, car_id: carID },
                 });

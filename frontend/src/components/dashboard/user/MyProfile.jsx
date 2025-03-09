@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 
 function MyProfile() {
     const [user, setUser] = useState(null);
@@ -22,7 +23,7 @@ function MyProfile() {
 
         const fetchProfile = async () => {
             try {
-                const response = await axios.get('/user/profile', {
+                const response = await axios.get(`${BASE_URL}/user/profile`, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 
