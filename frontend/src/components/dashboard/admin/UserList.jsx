@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import usePagination from "../../../usePagination";
+import { BASE_URL } from "../../../config";
 
 function UserList() {
     const [users, setUsers] = useState([]);
@@ -38,7 +39,7 @@ function UserList() {
 
         const fetchUsers = async () => {
             try {
-                const response = await axios.get('/admin/users', {
+                const response = await axios.get(`${BASE_URL}/admin/users`, {
                     headers: { Authorization: `Bearer ${token}` },
                     params: { page, per_page: perPage },
                 });

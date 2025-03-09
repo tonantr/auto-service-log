@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { validatePassword, validateEmail } from "../../../validation"
+import { BASE_URL } from "../../../config";
 
 function UpdateUser() {
     const { user_id } = useParams();
@@ -34,7 +35,7 @@ function UpdateUser() {
                     return;
                 }
 
-                const response = await axios.get(`/admin/user/${user_id}`,
+                const response = await axios.get(`${BASE_URL}/admin/user/${user_id}`,
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }
@@ -79,7 +80,7 @@ function UpdateUser() {
         }
 
         try {
-            const response = await axios.put(`/admin/update_user/${user_id}`, data, {
+            const response = await axios.put(`${BASE_URL}/admin/update_user/${user_id}`, data, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
