@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { validateVIN, validateYear } from "../../../validation"
+import { BASE_URL } from "../../../config";
 
 function UpdateCar() {
     const { car_id } = useParams();
@@ -29,7 +30,7 @@ function UpdateCar() {
                     return;
                 }
 
-                const response = await axios.get(`/admin/car/${car_id}`,
+                const response = await axios.get(`${BASE_URL}/admin/car/${car_id}`,
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }
@@ -74,7 +75,7 @@ function UpdateCar() {
         }
 
         try {
-            const response = await axios.put(`/admin/update_car/${car_id}`, data, {
+            const response = await axios.put(`${BASE_URL}/admin/update_car/${car_id}`, data, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 

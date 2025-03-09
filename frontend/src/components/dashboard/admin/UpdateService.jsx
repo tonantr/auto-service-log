@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { validateMileageCost } from "../../../validation";
 import { serviceTypes } from "../../../Constants"; 
+import { BASE_URL } from "../../../config";
 
 function UpdateService() {
     const { service_id } = useParams();
@@ -29,7 +30,7 @@ function UpdateService() {
                     return;
                 }
 
-                const response = await axios.get(`/admin/service/${service_id}`,
+                const response = await axios.get(`${BASE_URL}/admin/service/${service_id}`,
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }
@@ -68,7 +69,7 @@ function UpdateService() {
         }
 
         try {
-            const response = await axios.put(`/admin/update_service/${service_id}`, data, {
+            const response = await axios.put(`${BASE_URL}/admin/update_service/${service_id}`, data, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import usePagination from "../../../usePagination";
+import { BASE_URL } from "../../../config";
 
 function ServiceList() {
     const [services, setServices] = useState([]);
@@ -37,7 +38,7 @@ function ServiceList() {
         }
         const fetchServices = async () => {
             try {
-                const response = await axios.get('/admin/services', {
+                const response = await axios.get(`${BASE_URL}/admin/services`, {
                     headers: { Authorization: `Bearer ${token}` },
                     params: { page, per_page: perPage },
                 });
