@@ -31,7 +31,7 @@ function AdminDashboard({ onLogout }) {
             navigate(`/admin/search-results?query=${encodeURIComponent(searchQuery)}`);
             setSearchQuery("");
         }
-    }, [searchQuery]);
+    }, [searchQuery, navigate]);
 
     return (
         <div className="dashboard">
