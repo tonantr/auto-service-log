@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { validateVIN, validateYear } from "../../../validation"
 import Select from "react-select";
+import { BASE_URL } from "../../../config";
 
 function AddCar() {
     const [userID, setUserID] = useState("");
@@ -22,7 +23,7 @@ function AddCar() {
                 navigate("/login");
                 return;
             }
-            const response = await axios.get("/admin/users/list", {
+            const response = await axios.get(`${BASE_URL}/admin/users/list`, {
                 headers: {Authorization: `Bearer ${token}`},
             });
             setUsers(response.data);
@@ -67,7 +68,7 @@ function AddCar() {
         const data = { userID, name, model, year, vin };
 
         try {
-            const response = await axios.post("/admin/add_car", data, {
+            const response = await axios.post(`${BASE_URL}/admin/add_car`, data, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
