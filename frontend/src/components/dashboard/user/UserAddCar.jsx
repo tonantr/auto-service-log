@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { validateVIN, validateYear } from "../../../validation"
+import { BASE_URL } from "../../../config";
 
 function UserAddCar() {
     const [data, setData] = useState({
@@ -38,7 +39,7 @@ function UserAddCar() {
         }
 
         try {
-            const response = await axios.post("/user/add_car", data, {
+            const response = await axios.post(`${BASE_URL}/user/add_car`, data, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 

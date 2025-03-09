@@ -4,6 +4,7 @@ import axios from "axios";
 import Select from "react-select";
 import { validateMileageCost } from "../../../validation";
 import { serviceTypes } from "../../../Constants";
+import { BASE_URL } from "../../../config";
 
 function UserAddService() {
     const [cars, setCars] = useState([]);
@@ -27,7 +28,7 @@ function UserAddService() {
                 navigate("/login");
                 return;
             }
-            const response = await axios.get('/user/cars/ids-and-names', {
+            const response = await axios.get(`${BASE_URL}/user/cars/ids-and-names`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setCars(response.data)
@@ -63,7 +64,7 @@ function UserAddService() {
         }
 
         try {
-            const response = await axios.post("/user/add_service", data, {
+            const response = await axios.post(`${BASE_URL}/user/add_service`, data, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
