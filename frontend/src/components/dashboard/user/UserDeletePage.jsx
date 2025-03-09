@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 
 function UserDeletePage() {
     const { entity, id } = useParams();
@@ -20,7 +21,7 @@ function UserDeletePage() {
                 navigate('/login');
                 return;
             }
-            const response = await axios.delete(`/user/delete_${entity}/${id}`, {
+            const response = await axios.delete(`${BASE_URL}/user/delete_${entity}/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
