@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import usePagination from "../../../usePagination";
+import { BASE_URL } from "../../../config";
 
 function MyCars() {
     const [cars, setCars] = useState([]);
@@ -37,7 +38,7 @@ function MyCars() {
         }
         const fetchCars = async () => {
             try {
-                const response = await axios.get('/user/cars', {
+                const response = await axios.get(`${BASE_URL}/user/cars`, {
                     headers: { Authorization: `Bearer ${token}` },
                     params: { page, per_page: perPage },
                 });
