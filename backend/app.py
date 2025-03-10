@@ -1,5 +1,5 @@
 from app import create_app
-from waitress import serve
+# from waitress import serve
 from config import DevelopmentConfig, ProductionConfig
 # from app.database.database import db
 
@@ -21,4 +21,4 @@ if __name__ == "__main__":
         app.run(host=host, port=port, debug=debug)
     else:
         print(f"Starting production server at http://{host}:{port}")
-        serve(app, host=host, port=port)
+        # serve(app, host=host, port=port)

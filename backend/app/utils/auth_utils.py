@@ -7,6 +7,9 @@ from bcrypt import hashpw, gensalt, checkpw
 from app.models.user import User
 from app.database.database import db
 from app.utils.logging_config import logger
+from dotenv import load_dotenv
+
+load_dotenv()
 
 SECRET_KEY = os.getenv("FLASK_SECRET_KEY")
 
