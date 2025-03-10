@@ -14,9 +14,9 @@ function Login( {setIsAuthenticated, setRole}) {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`${BASE_URL}/`, {
-                username, password,
-            });
+            const response = await axios.post(`${BASE_URL}/`, 
+                { username, password},
+            );
 
             if (response.status === 200 && response.data.access_token && response.data.role && response.data.username) {
                 setError(null);
