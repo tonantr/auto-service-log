@@ -28,6 +28,8 @@ def create_app(config_class=ProductionConfig):
             return send_from_directory(
                 os.path.join(os.getcwd(), "app/build"), "index.html"
             )
+        else:
+            return jsonify({"error": "React app not found."}), 404
 
     @app.route("/static/<path:path>")
     def serve_static_files(path):
@@ -37,6 +39,8 @@ def create_app(config_class=ProductionConfig):
             return send_from_directory(
                 os.path.join(os.getcwd(), "app/build/static"), path
             )
+        else:
+            return jsonify({"error": f"Static file '{path}' not found."}), 404
 
     # ...
 
