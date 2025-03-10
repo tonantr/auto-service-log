@@ -1,6 +1,6 @@
 import logging
 import os
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, request, jsonify
 from flask_cors import CORS
 from app.routes.admin_routes import admin_bp
 from app.routes.user_routes import user_bp
@@ -41,7 +41,7 @@ def create_app(config_class=ProductionConfig):
     db.init_app(app)
 
     CORS(app)
-
+    
     app.register_blueprint(admin_bp, url_prefix="/admin")
     app.register_blueprint(user_bp, url_prefix="/user")
     app.register_blueprint(auth_bp, url_prefix="/")
