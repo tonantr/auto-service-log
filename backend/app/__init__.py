@@ -11,29 +11,34 @@ from config import DevelopmentConfig, ProductionConfig
 
 def create_app(config_class=ProductionConfig):
     if config_class is None:
-        raise ValueError("No configuration class provided")
-    
-    app = Flask(__name__)
+        raise ValueError("No configuration class.")
 
-    # app = Flask(__name__, static_folder="app/build", static_url_path="")
+    # If Flask and React are deployed separately
+    # app = Flask(__name__)
 
-    # @app.route("/")
-    # def serve_react():
-    #     index_path = os.path.join(os.getcwd(), "app/build", "index.html")
+    # This is for when you serve both Flask and React from the same server
+    # ....
+    app = Flask(__name__, static_folder="app/build", static_url_path="")
 
-    #     if os.path.exists(index_path):
-    #         return send_from_directory(
-    #             os.path.join(os.getcwd(), "app/build"), "index.html"
-    #         )
+    @app.route("/")
+    def serve_react():
+        index_path = os.path.join(os.getcwd(), "app/build", "index.html")
 
-    # @app.route("/static/<path:path>")
-    # def serve_static_files(path):
-    #     static_path = os.path.join(os.getcwd(), "app/build/static", path)
+        if os.path.exists(index_path):
+            return send_from_directory(
+                os.path.join(os.getcwd(), "app/build"), "index.html"
+            )
 
-    #     if os.path.exists(static_path):
-    #         return send_from_directory(
-    #             os.path.join(os.getcwd(), "app/build/static"), path
-    #         )
+    @app.route("/static/<path:path>")
+    def serve_static_files(path):
+        static_path = os.path.join(os.getcwd(), "app/build/static", path)
+
+        if os.path.exists(static_path):
+            return send_from_directory(
+                os.path.join(os.getcwd(), "app/build/static"), path
+            )
+
+    # ...
 
     app.config.from_object(config_class)
 
@@ -42,8 +47,9 @@ def create_app(config_class=ProductionConfig):
 
     db.init_app(app)
 
-    CORS(app)
-    
+    # If Flask and React are deployed separately
+    # CORS(app)
+
     app.register_blueprint(admin_bp, url_prefix="/admin")
     app.register_blueprint(user_bp, url_prefix="/user")
     app.register_blueprint(auth_bp, url_prefix="/")
