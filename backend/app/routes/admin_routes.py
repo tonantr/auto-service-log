@@ -11,6 +11,7 @@ from app.utils.constants import (
     ERROR_CAR_NOT_FOUND,
     ERROR_SERVICE_NOT_FOUND,
     ERROR_NO_SERVICES_FOUND,
+    ERROR_NO_LOGS_LOGIN_FOUND,
 )
 
 admin_bp = Blueprint("admin_bp", __name__)
@@ -336,6 +337,25 @@ def delete_service(current_user, service_id):
     except Exception as e:
         logger.error(f"Error in delete_service: {str(e)}", exc_info=True) 
         return jsonify({"message": "An unexpected error occurred."}), 500
+
+@admin_bp.route("/logs_login", methods=["GET"])
+@token_required
+def get_logs_login(current_user):
+    try:
+        page = request.args.get('page', default=1, type=int)
+        per_page = request.args.get('per_page', default=10, type=int)
+
+        logs_login = AdminService.get_logs_login(page=page, per_page=per_page)
+
+        if logs_login:
+            return jsonify(logs_login), 200
+        else:
+            logger.warning(ERROR_NO_LOGS_LOGIN_FOUND)
+            return jsonify(message=ERROR_NO_LOGS_LOGIN_FOUND), 404
+
+    except Exception as e:
+        logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
+        return jsonify(message=ERROR_FETCHING_DATA), 500
 
 @admin_bp.route('/dashboard_home', methods=['GET'])
 @token_required

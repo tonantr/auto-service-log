@@ -17,6 +17,7 @@ from app.utils.constants import (
     ERROR_USER_NOT_FOUND,
     ERROR_NO_CARS_FOUND,
     ERROR_SERVICE_NOT_FOUND,
+    ERROR_NO_LOGS_LOGIN_FOUND,
     ERROR_NO_SERVICES_FOUND,
 )
 
@@ -198,7 +199,13 @@ class AdminService:
                 return result
             else:
                 logger.warning(ERROR_NO_CARS_FOUND)
-                return []
+                return {
+                    "cars": [],
+                    "total_cars": 0,
+                    "total_pages": 0,
+                    "current_page": page,
+                    "per_page": per_page,
+                }
         except Exception as e:
             logger.error(f"Error in get_cars_with_user_name: {str(e)}")
             return {
@@ -443,10 +450,61 @@ class AdminService:
             return {"message": "An unexpected error occurred."}, 500
 
     @staticmethod
+    def get_logs_login(page=1, per_page=10):
+        try:
+            pagination = (
+                db.session.query(LoginLogs)
+                .order_by(LoginLogs.login_time.desc()) 
+                .paginate(page=page, per_page=per_page, error_out=False)
+            )
+
+            if pagination.items:
+                log_list = []
+                for log in pagination.items:
+                    log_list.append(
+                        {
+                            "log_id": log.log_id,
+                            "user_id": log.user_id,
+                            "login_time": log.login_time,
+                            "logout_time": log.logout_time,
+                            "ip_address": log.ip_address,
+                        }
+                    )
+                result = {
+                    "logs": log_list,
+                    "total_logs": pagination.total,
+                    "total_pages": pagination.pages,
+                    "current_page": pagination.page,
+                    "per_page": pagination.per_page,
+                }
+                return result
+            else:
+                logger.warning(ERROR_NO_LOGS_LOGIN_FOUND)
+                return {
+                    "logs": [],
+                    "total_logs": 0,
+                    "total_pages": 0,
+                    "current_page": page,
+                    "per_page": per_page,
+                }
+            
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in get_logs_login: {str(e)}")
+            return {
+                "logs": [],
+                "total_logs": 0,
+                "total_pages": 0,
+                "current_page": page,
+                "per_page": per_page,
+            }
+
+    @staticmethod
     def get_total_users():
         try:
             return User.query.count()
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in get_total_users: {str(e)}")
             return 0
 
@@ -455,6 +513,7 @@ class AdminService:
         try:
             return Car.query.count()
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in get_total_cars: {str(e)}")
             return 0
 
@@ -463,6 +522,7 @@ class AdminService:
         try:
             return Service.query.count()
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in get_total_services: {str(e)}")
             return 0
 
@@ -471,9 +531,9 @@ class AdminService:
         try:
             return LoginLogs.query.with_entities(LoginLogs.user_id).distinct().count()
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in get_total_user_visits: {str(e)}")
             return 0
-
 
     @staticmethod
     def search(query, page=1, per_page=10):
@@ -535,5 +595,6 @@ class AdminService:
             }
 
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in search: {str(e)}")
             return {"users": [], "cars": [], "services": []}

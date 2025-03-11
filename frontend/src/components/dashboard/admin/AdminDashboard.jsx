@@ -42,6 +42,7 @@ function AdminDashboard({ onLogout }) {
                     <li><Link to="/admin/users" className="sidebar-link">Users</Link></li>
                     <li><Link to="/admin/cars" className="sidebar-link">Cars</Link></li>
                     <li><Link to="/admin/services" className="sidebar-link">Services</Link></li>
+                    <li><Link to="/admin/logs_login" className="sidebar-link">Visitors</Link></li>
                     <li>
                         <button onClick={onLogout} className="logout-button">
                             Logout
