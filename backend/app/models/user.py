@@ -1,5 +1,4 @@
 from app.database.database import db
-from app.models.car import Car
 
 
 class User(db.Model):
@@ -12,6 +11,7 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
 
     cars = db.relationship('Car', back_populates='user', cascade="all, delete-orphan")
+    login_logs = db.relationship('LoginLogs', back_populates='user', cascade="all, delete-orphan")
 
     def to_dict(self, include_cars=False):
         user_dict = {

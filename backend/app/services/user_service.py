@@ -27,6 +27,7 @@ class UserService:
         try:
             return User.query.get(current_user.user_id)
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in get_profile: {str(e)}")
             return None
 
@@ -103,6 +104,7 @@ class UserService:
                 return []
 
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in get_cars_for_user: {str(e)}")
             return {
                 "cars": [],
@@ -118,6 +120,7 @@ class UserService:
             cars = Car.query.options(load_only(Car.car_id, Car.name)).filter(Car.user_id==current_user.user_id).all()
             return [{"car_id": car.car_id, "name": car.name} for car in cars]
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in get_all_car_ids_and_names: {str(e)}")
             return []
 
@@ -128,6 +131,7 @@ class UserService:
             if car:
                 return car.to_dict()
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in get_car: {str(e)}")
             return None
 
@@ -250,6 +254,7 @@ class UserService:
                 }
 
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in get_services_for_car: {str(e)}")
             return {
                     "services": [],
@@ -266,6 +271,7 @@ class UserService:
             if service:
                 return service.to_dict()
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in get_service: {str(e)}")
             return None
 
@@ -350,6 +356,7 @@ class UserService:
         try:
             return Car.query.filter_by(user_id=current_user.user_id).count()
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in get_total_cars: {str(e)}")
             return 0
 
@@ -363,6 +370,7 @@ class UserService:
                 .count()
             )
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in get_total_services: {str(e)}")
             return 0
 
@@ -407,5 +415,6 @@ class UserService:
             }
 
         except Exception as e:
+            db.session.rollback()
             logger.error(f"Error in search: {str(e)}")
             return {"cars": [], "services": []}
