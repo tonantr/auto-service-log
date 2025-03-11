@@ -3,6 +3,7 @@ from sqlalchemy.orm import load_only
 from app.models.user import User
 from app.models.car import Car
 from app.models.service import Service
+from app.models.login_logs import LoginLogs
 from app.utils.logging_config import logger
 from app.database.database import db
 from app.utils.auth_utils import hash_password
@@ -464,6 +465,15 @@ class AdminService:
         except Exception as e:
             logger.error(f"Error in get_total_services: {str(e)}")
             return 0
+
+    @staticmethod
+    def get_total_user_visits():
+        try:
+            return LoginLogs.query.with_entities(LoginLogs.user_id).distinct().count()
+        except Exception as e:
+            logger.error(f"Error in get_total_user_visits: {str(e)}")
+            return 0
+
 
     @staticmethod
     def search(query, page=1, per_page=10):

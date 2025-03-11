@@ -344,11 +344,13 @@ def get_dashboard_data(current_user):
         total_users = AdminService.get_total_users()
         total_cars = AdminService.get_total_cars()
         total_services = AdminService.get_total_services()
+        total_visitors = AdminService.get_total_user_visits()
         
         return jsonify({
             'total_users': total_users,
             'total_cars': total_cars,
-            'total_services': total_services
+            'total_services': total_services,
+            'total_visitors': total_visitors,
         }), 200
     except Exception as e:
         logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)

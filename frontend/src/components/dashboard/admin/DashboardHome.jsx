@@ -8,6 +8,7 @@ function DashboardHome() {
         total_users: 0,
         total_cars: 0,
         total_services: 0,
+        total_visitors: 0,
     });
 
     const [error, setError] = useState("");
@@ -50,6 +51,7 @@ function DashboardHome() {
             <p><strong>Total Users:</strong> {dashboardData.total_users}</p>
             <p><strong>Total Cars:</strong> {dashboardData.total_cars}</p>
             <p><strong>Total Services:</strong> {dashboardData.total_services}</p>
+            <p><strong>Total Visitors:</strong> {dashboardData.total_visitors}</p>
         </>
     );
 }
