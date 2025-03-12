@@ -24,9 +24,6 @@ Thumbs.db
 # Environment variables
 .env
 
-# Sensitive configuration
-config.py
-
 # Logging
 app.log
 
