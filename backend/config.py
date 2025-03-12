@@ -1,13 +1,14 @@
 import os
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-
+INSTANCE_FOLDER = os.path.join(BASE_DIR, 'instance')
 
 class Config:
     SECRET_KEY = os.getenv("FLASK_SECRET_KEY", "defaultsecretkey5555")
     SQLALCHEMY_DATABASE_URI = os.getenv(
-        "DATABASE_URI", f"sqlite:///{os.path.join(BASE_DIR, 'auto_service.db')}"
+        "DATABASE_URI", f"sqlite:///{os.path.join(INSTANCE_FOLDER, 'auto_service.db')}"
     )
+    
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     DEBUG = os.getenv("DEBUG", "False").lower() == "true"
