@@ -1,17 +1,15 @@
 from flask import request, jsonify
 import jwt
-import os
 import datetime
 from functools import wraps
 from bcrypt import hashpw, gensalt, checkpw
 from app.models.user import User
 from app.database.database import db
 from app.utils.logging_config import logger
-from dotenv import load_dotenv
+from config import Config
 
-load_dotenv()
 
-SECRET_KEY = os.getenv("FLASK_SECRET_KEY")
+SECRET_KEY = Config.SECRET_KEY
 
 
 def token_required(f):
@@ -33,7 +31,7 @@ def token_required(f):
 
             if not current_user:
                 return jsonify({"message": "User not found!"}), 404
-            
+
         except jwt.ExpiredSignatureError:
             return jsonify({"message": "Token has expired!"}), 401
         except jwt.InvalidTokenError:
@@ -100,7 +98,7 @@ def authenticate(username, password):
                 role = user.role
                 access_token = generate_token(username)
                 return True, access_token, role, username
-            
+
             logger.warning(f"Incorrect password for user '{username}'")
             return False, None, None, None
     except Exception as e:
