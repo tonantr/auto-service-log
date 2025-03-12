@@ -74,7 +74,7 @@ function App() {
           <Route path="users" element={<UserList />} />
           <Route path="cars" element={<CarList />} />
           <Route path="services" element={<ServiceList />} />
-          <Route path="logs_login" element={<LogsLogin />} />
+          <Route path="logs" element={<LogsLogin />} />
           <Route path="search-results" element={<SearchResults />} />
           <Route path="add-user" element={<AddUser />} />
           <Route path="update-user/:user_id" element={<UpdateUser />} />

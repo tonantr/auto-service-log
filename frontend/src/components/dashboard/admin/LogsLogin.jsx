@@ -18,7 +18,7 @@ function LogsLogin() {
     } = usePagination();
 
     const handleDeleteLog = (log_id) => {
-        window.confirm("Are you sure?")
+        navigate(`/admin/delete/log/${log_id}`)
     }
 
     useEffect(() => {
@@ -55,7 +55,7 @@ function LogsLogin() {
 
     return (
         <div>
-            <h3>Logs Login List</h3>
+            <h3>Logs Login</h3>
             {error && <p>{error}</p>}
 
             <table style={{ marginTop: "10px" }}>
@@ -83,7 +83,7 @@ function LogsLogin() {
                                 <td>{log.logout_time || "N/A"}</td>
                                 <td>{log.ip_address}</td>
                                 <td>
-                                    <button className="button button-primary" onClick={handleDeleteLog}>Delete</button>
+                                    <button className="button button-primary" onClick={() => handleDeleteLog(log.log_id)}>Delete</button>
                                 </td>
                             </tr>
                         ))

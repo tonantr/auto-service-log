@@ -357,6 +357,17 @@ def get_logs_login(current_user):
         logger.error(f"{ERROR_FETCHING_DATA}: {e}", exc_info=True)
         return jsonify(message=ERROR_FETCHING_DATA), 500
 
+@admin_bp.route("/delete_log/<int:log_id>", methods=["DELETE"])
+@token_required
+def delete_log_login(current_user, log_id):
+    try:
+        response, status_code = AdminService.delete_log_login(log_id)
+        return jsonify(response), status_code
+    
+    except Exception as e:
+        logger.error(f"Error in delete_log_login: {str(e)}", exc_info=True) 
+        return jsonify({"message": "An unexpected error occurred."}), 500
+
 @admin_bp.route('/dashboard_home', methods=['GET'])
 @token_required
 def get_dashboard_data(current_user):

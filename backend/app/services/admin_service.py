@@ -18,6 +18,7 @@ from app.utils.constants import (
     ERROR_NO_CARS_FOUND,
     ERROR_SERVICE_NOT_FOUND,
     ERROR_NO_LOGS_LOGIN_FOUND,
+    ERROR_LOG_NOT_FOUND,
     ERROR_NO_SERVICES_FOUND,
 )
 
@@ -498,6 +499,23 @@ class AdminService:
                 "current_page": page,
                 "per_page": per_page,
             }
+
+    @staticmethod
+    def delete_log_login(log_id):
+        try:
+            log = LoginLogs.query.get(log_id)
+            if not log:
+                logger.warning(ERROR_LOG_NOT_FOUND)
+                return {"message": ERROR_LOG_NOT_FOUND}, 404
+            
+            db.session.delete(log)
+            db.session.commit()
+
+            return {"message": DELETE_SUCCESS}, 200
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"Error in delete_logs_login: {str(e)}")
+            return {"message": "An unexpected error occurred."}, 500
 
     @staticmethod
     def get_total_users():
