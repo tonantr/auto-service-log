@@ -48,14 +48,9 @@ function App() {
       setIsAuthenticated(true)
       setRole(userRole);
     }
-  }, [isAuthenticated, role])
+  }, [])
 
-  const handleLogout = () => {
-    localStorage.clear();
-    setIsAuthenticated(false);
-    setRole('');
-  };
-
+  
   return (
     <Router>
       <Routes>
@@ -66,7 +61,7 @@ function App() {
           path="/admin"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated} role={role} requiredRole="admin">
-              <AdminDashboard onLogout={handleLogout} />
+              <AdminDashboard setIsAuthenticated={setIsAuthenticated} setRole={setRole}/>
             </ProtectedRoute>
           }
         >
@@ -89,7 +84,7 @@ function App() {
           path="/user"
           element={
             <ProtectedRoute isAuthenticated={isAuthenticated} role={role} requiredRole="user">
-              <UserDashboard onLogout={handleLogout} />
+              <UserDashboard setIsAuthenticated={setIsAuthenticated} setRole={setRole}/>
             </ProtectedRoute>
           }
         >

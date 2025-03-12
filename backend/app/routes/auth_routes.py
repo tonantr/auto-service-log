@@ -1,9 +1,12 @@
 from flask import Blueprint, request, jsonify
+from app.utils.auth_utils import token_required
 from app.utils.auth_utils import authenticate
 from app.utils.logging_config import logger
 from app.services.auth_service import log_login
 from app.utils.constants import ERROR_USER_NOT_FOUND
 from app.models.user import User
+from app.services.auth_service import log_logout
+from app.utils.constants import ERROR_USER_NOT_FOUND
 
 auth_bp = Blueprint("auth_routes", __name__)
 
@@ -38,4 +41,20 @@ def login():
             return jsonify(message="Invalid credentials"), 401
     except Exception as e:
         logger.error(f"Error during login: {e}")
+        return jsonify(message="An error occurred while processing your request"), 500
+
+
+@auth_bp.route("/logout", methods=["POST"])
+@token_required
+def logout(current_user):
+    try:
+        user = User.query.filter_by(username=current_user.username).first()
+
+        if user:
+            log_logout(user.user_id)
+            return jsonify(message="Logout successful"), 200
+        else:
+            return jsonify(message=ERROR_USER_NOT_FOUND), 404
+    except Exception as e:
+        logger.error(f"Error during logout: {e}")
         return jsonify(message="An error occurred while processing your request"), 500

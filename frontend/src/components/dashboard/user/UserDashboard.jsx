@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../../config";
+import axios from "axios";
 
-function UserDashboard({ onLogout }) {
+function UserDashboard({ setIsAuthenticated, setRole }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [loggedInUser, setLoggedInUser] = useState('');
-    const [role, setRole] = useState('');
+    const [role, setRoleState] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -18,7 +20,7 @@ function UserDashboard({ onLogout }) {
         }
 
         setLoggedInUser(username);
-        setRole(userRole);
+        setRoleState(userRole);
     }, [navigate]);
 
     const handleSearchChange = useCallback((e) => {
@@ -33,6 +35,29 @@ function UserDashboard({ onLogout }) {
         }
     }, [searchQuery]);
 
+    const handleLogout = async () => {
+        try {
+          const token = localStorage.getItem('access_token');
+    
+          if (token) {
+            const response = await axios.post(`${BASE_URL}/logout`, {}, {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+              }
+            });
+    
+            if (response.status === 200) {
+              localStorage.clear();
+              setIsAuthenticated(false); 
+              setRole(''); 
+              navigate("/login")
+            }
+          }
+        } catch (error) {
+          console.error('Logout request failed:', error);
+        }
+      };
+
     return (
         <div className="dashboard">
             <div className="sidebar">
@@ -43,7 +68,7 @@ function UserDashboard({ onLogout }) {
                     <li><Link to="/user/cars" className="sidebar-link">My Cars</Link></li>
                     <li><Link to="/user/services" className="sidebar-link">My Services</Link></li>
                     <li>
-                        <button onClick={onLogout} className="logout-button">
+                        <button onClick={handleLogout} className="logout-button">
                             Logout
                         </button>
                     </li>
