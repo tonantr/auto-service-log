@@ -7,7 +7,7 @@ class LoginLogs(db.Model):
     log_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     login_time = db.Column(db.DateTime, default=db.func.now(), nullable=False)
-    logout_time = db.Column(db.DateTime, default=db.func.now(), nullable=False)
+    logout_time = db.Column(db.DateTime, nullable=True)
     ip_address = db.Column(db.String(45))
 
     user = db.relationship('User', back_populates='login_logs')

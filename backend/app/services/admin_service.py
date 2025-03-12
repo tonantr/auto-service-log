@@ -454,7 +454,7 @@ class AdminService:
         try:
             pagination = (
                 db.session.query(LoginLogs)
-                .order_by(LoginLogs.login_time.desc()) 
+                .order_by(LoginLogs.login_time.asc()) 
                 .paginate(page=page, per_page=per_page, error_out=False)
             )
 

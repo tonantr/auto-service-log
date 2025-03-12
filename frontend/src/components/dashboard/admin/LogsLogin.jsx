@@ -53,15 +53,6 @@ function LogsLogin() {
         fetchLogs();
     }, [page, perPage, navigate]);
 
-    const formatDate = (date) => {
-        if (!date) return "N/A";
-        return new Date(date).toLocaleDateString("en-CA", {
-            year: "numeric",
-            month: "short",
-            day: "numeric"
-        });
-    };
-
     return (
         <div>
             <h3>Logs Login List</h3>
@@ -88,8 +79,8 @@ function LogsLogin() {
                             <tr key={log.log_id}>
                                 <td>{log.log_id}</td>
                                 <td>{log.user_id}</td>
-                                <td>{formatDate(log.login_time)}</td>
-                                <td>{formatDate(log.logout_time)}</td>
+                                <td>{log.login_time || "N/A"}</td>
+                                <td>{log.logout_time || "N/A"}</td>
                                 <td>{log.ip_address}</td>
                                 <td>
                                     <button className="button button-primary" onClick={handleDeleteLog}>Delete</button>
